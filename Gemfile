@@ -29,6 +29,8 @@ gem 'inherited_resources', github: 'josevalim/inherited_resources', branch: 'rai
 # Serve static assets from heroku and other things
 gem 'rails_12factor', group: :production
 
+gem 'aws-sdk'
+
 group :development, :test do
   gem 'rspec-rails'
 
