@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150127024149) do
+ActiveRecord::Schema.define(version: 20150128033845) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(version: 20150127024149) do
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "image_sets", force: :cascade do |t|
-    t.integer  "lion_id",                                                            null: false
+    t.integer  "lion_id"
     t.integer  "main_image_id"
     t.integer  "uploading_organization_id",                                          null: false
     t.integer  "uploading_user_id",                                                  null: false
@@ -67,22 +67,13 @@ ActiveRecord::Schema.define(version: 20150127024149) do
     t.datetime "updated_at",                                                         null: false
   end
 
-  create_table "image_types", force: :cascade do |t|
-    t.string   "name",         null: false
-    t.string   "display_name", null: false
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
-  end
-
-  add_index "image_types", ["name"], name: "index_image_types_on_name", unique: true, using: :btree
-
   create_table "images", force: :cascade do |t|
-    t.integer  "image_type_id"
-    t.integer  "image_set_id",                  null: false
-    t.boolean  "is_public",     default: false
-    t.string   "url"
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.string   "image_type"
+    t.integer  "image_set_id",                 null: false
+    t.boolean  "is_public",    default: false
+    t.string   "url",                          null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
   end
 
   create_table "lions", force: :cascade do |t|
@@ -109,6 +100,7 @@ ActiveRecord::Schema.define(version: 20150127024149) do
     t.datetime "updated_at",                       null: false
     t.string   "encrypted_password",  default: "", null: false
     t.datetime "remember_created_at"
+    t.integer  "sign_in_count",       default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
   end

@@ -3,9 +3,9 @@ class ImageSet < ActiveRecord::Base
   belongs_to :organization, -> { where is_verified: true },
                             foreign_key: 'owner_organization_id'
 
-  belongs_to :uploading_organization, class: 'Organization',
+  belongs_to :uploading_organization, class_name: 'Organization',
                                       foreign_key: 'uploading_organization_id'
-  belongs_to :uploading_user, class: 'User',
+  belongs_to :uploading_user, class_name: 'User',
                               foreign_key: 'uploading_user_id'
 
   has_many :images

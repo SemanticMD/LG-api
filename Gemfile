@@ -33,6 +33,8 @@ gem 'aws-sdk'
 
 gem 'rack-cors'
 
+gem 'oat'
+
 group :development, :test do
   gem 'rspec-rails'
 
@@ -46,5 +48,16 @@ group :development, :test do
   gem 'spring'
 
   gem 'foreman'
-end
 
+  gem 'fabrication'
+  gem 'faker'
+
+  gem 'rspec-its'
+
+  # For debugging
+  # To set a breakpoint, put "binding.remote_pry" in your ruby code,
+  # and run "pry-remote" in any terminal window
+  # Pry Debugger commands https://github.com/nixme/pry-debugger
+  gem 'pry-remote'
+
+end

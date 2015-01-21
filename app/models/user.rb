@@ -7,4 +7,5 @@ class User < ActiveRecord::Base
   belongs_to :organization
   has_many :image_sets, foreign_key: 'uploading_user_id'
   validates :email, uniqueness: true
+  validates :organization, presence: true
 end
