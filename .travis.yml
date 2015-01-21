@@ -1,6 +1,12 @@
 language: ruby
+
 rvm:
 - 2.2.0
+
+before_script:
+- psql -c 'create database travis_ci_test;' -U postgres
+- cp config/database.yml.travis config/database.yml
+
 notifications:
   slack:
     secure: rSYWGiaG7nwgzBJ0mJyjhfUFBXUsbq9M5j1+d7j4WfaAcVsf0PlHFPl9r3G6ooY1GxKN481MFYqWCGljtwfyKIN4doWavtMwKGDWHYPeGinYQ/ae2wk9BRy+YXwnGYvdNJQBpV17dMr59VURbml51mtIwDsgSEMIYNI3e3gUc5o=
