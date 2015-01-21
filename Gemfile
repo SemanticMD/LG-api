@@ -26,6 +26,9 @@ gem 'activeadmin', github: 'activeadmin'
 gem 'inherited_resources', github: 'josevalim/inherited_resources', branch: 'rails-4-2'
 gem 'devise' # used by activeadmin
 
+# Serve static assets from heroku and other things
+gem 'rails_12factor', group: :production
+
 group :development, :test do
   gem 'rspec-rails'
 
