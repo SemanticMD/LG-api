@@ -31,6 +31,8 @@ gem 'rails_12factor', group: :production
 
 gem 'aws-sdk'
 
+gem 'rack-cors'
+
 group :development, :test do
   gem 'rspec-rails'
 

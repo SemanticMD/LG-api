@@ -30,5 +30,18 @@ module LionGuardiansApi
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+
+    config.middleware.insert 0, Rack::Cors do
+      allow do
+        origins '*'
+        cors_params = { headers: %w(Accept Authorization Content-Type),
+                        methods: [:options, :patch, :get, :post, :put],
+                        credentials: true }
+
+        %w(/*).each do |resource_path|
+          resource resource_path, cors_params
+        end
+      end
+    end
   end
 end
