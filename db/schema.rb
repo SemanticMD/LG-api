@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150120191705) do
+ActiveRecord::Schema.define(version: 20150127024149) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,5 +48,71 @@ ActiveRecord::Schema.define(version: 20150120191705) do
 
   add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "image_sets", force: :cascade do |t|
+    t.integer  "lion_id",                                                            null: false
+    t.integer  "main_image_id"
+    t.integer  "uploading_organization_id",                                          null: false
+    t.integer  "uploading_user_id",                                                  null: false
+    t.integer  "owner_organization_id"
+    t.boolean  "is_verified",                                        default: false, null: false
+    t.decimal  "latitude",                  precision: 10, scale: 6
+    t.decimal  "decimal",                   precision: 10, scale: 6
+    t.decimal  "longitude",                 precision: 10, scale: 6
+    t.datetime "photo_date"
+    t.string   "gender"
+    t.string   "age"
+    t.boolean  "is_primary",                                         default: false
+    t.datetime "created_at",                                                         null: false
+    t.datetime "updated_at",                                                         null: false
+  end
+
+  create_table "image_types", force: :cascade do |t|
+    t.string   "name",         null: false
+    t.string   "display_name", null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  add_index "image_types", ["name"], name: "index_image_types_on_name", unique: true, using: :btree
+
+  create_table "images", force: :cascade do |t|
+    t.integer  "image_type_id"
+    t.integer  "image_set_id",                  null: false
+    t.boolean  "is_public",     default: false
+    t.string   "url"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
+  create_table "lions", force: :cascade do |t|
+    t.string   "name",            null: false
+    t.integer  "organization_id"
+    t.string   "gender"
+    t.string   "age"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "lions", ["name"], name: "index_lions_on_name", unique: true, using: :btree
+
+  create_table "organizations", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string   "email",               default: "", null: false
+    t.integer  "organization_id"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.string   "encrypted_password",  default: "", null: false
+    t.datetime "remember_created_at"
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+  end
+
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
 
 end
