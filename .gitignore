@@ -12,4 +12,8 @@
 !/log/.keep
 /tmp
 
+# temp files for sublime and emacs
+*~
+*#*#
+
 .env
