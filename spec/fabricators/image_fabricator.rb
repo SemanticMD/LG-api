@@ -9,6 +9,5 @@ Fabricator(:whisker_image, from: :image) do
 end
 
 Fabricator(:public_image, from: :image) do
-  image_type { 'cv' }
   is_public true
 end

@@ -9,4 +9,5 @@ class ImageSet < ActiveRecord::Base
                               foreign_key: 'uploading_user_id'
 
   has_many :images
+  belongs_to  :main_image, class_name: 'Image'
 end

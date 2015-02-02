@@ -8,13 +8,13 @@ class UploadsController < ApiController
       acl: :public_read
     )
 
-    json = {
+    upload = {
       id:     id,
       url:    @s3_direct_post.url.to_s,
       fields: @s3_direct_post.fields
     }
 
-    render json: {upload: json}
+    render json: UploadSerializer.new(upload)
   end
 
   private

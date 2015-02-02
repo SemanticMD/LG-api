@@ -7,8 +7,10 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 
-  resources :image_sets, only:[:create]
-  resources :images, only:[:create, :show]
+  # Paths must be CamelCase
+
+  resources :image_sets, only:[:create, :show, :update], path: 'imageSets'
+  resources :images, only:[:create, :show, :update]
   resources :organizations, only: [:index]
   resources :uploads, only:[:create]
 

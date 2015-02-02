@@ -28,4 +28,26 @@ RSpec.describe ImagesController, :type => :controller do
       expect { request.call }.to change { Image.count }.by(1)
     }
   end
+
+  describe '#update' do
+    let!(:image) { Fabricate(:public_image) }
+    let(:new_url) { 'isaacezer.com' }
+    let(:params) {
+      {
+        url: new_url,
+        is_public: false
+      }
+    }
+
+    let(:request) { ->{ put :update, id: image.id, image: params } }
+
+    it {
+      expect { request.call }.to change{ image.reload.url }.to(new_url)
+    }
+
+    it {
+      expect { request.call }.to change{ image.reload.is_public }.
+                                  from(true).to(false)
+    }
+  end
 end
