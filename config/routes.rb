@@ -7,6 +7,9 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 
+  resources :image_sets, only:[:create]
+  resources :images, only:[:create, :show]
+  resources :organizations, only: [:index]
   resources :uploads, only:[:create]
 
   # Example of regular route:

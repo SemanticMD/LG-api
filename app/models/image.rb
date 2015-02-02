@@ -1,6 +1,8 @@
 class Image < ActiveRecord::Base
   belongs_to :image_set
-  belongs_to :image_type
 
   validates :url, presence: true
+  validates :image_type,
+    :inclusion  => { :in => [ 'cv', 'full-body', 'whisker', 'main-id', 'markings' ],
+    :message    => "%{value} is not a valid image type" }
 end
