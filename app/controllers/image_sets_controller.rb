@@ -25,20 +25,25 @@ class ImageSetsController < ApiController
   def expanded_params
     @uploading_user = User.find_by_id(image_set_params[:user_id])
     @uploading_organization = @uploading_user.organization
-    image_set_params.except(:user_id)
+    _params = image_set_params.except(:user_id)
       .merge({:uploading_user => @uploading_user,
               :uploading_organization => @uploading_organization})
+
+    rename_nested_attributes(_params, [:images, :main_image])
   end
 
   def image_set_params
-    params.require(:image_set).permit(:url,
-                                      :lion,
-                                      :user_id,
-                                      :age,
-                                      :name,
-                                      :gender,
-                                      :main_image_id,
-                                      :latitude,
-                                      :longitude)
+    params.require(:image_set).
+      permit(
+          :url,
+          :lion,
+          :user_id,
+          :age,
+          :name,
+          :gender,
+          :latitude,
+          :longitude,
+          :main_image_id,
+          images:     [:id, :url, :image_type, :is_public])
   end
 end
