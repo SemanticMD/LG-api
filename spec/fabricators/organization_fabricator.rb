@@ -1,3 +1,3 @@
 Fabricator(:organization) do
-  name { Faker::Lorem.word }
+  name { Faker::Name.name }
 end
