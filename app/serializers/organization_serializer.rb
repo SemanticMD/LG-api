@@ -1,11 +1,7 @@
-require 'oat/adapters/json_api'
-class OrganizationSerializer < Oat::Serializer
-  adapter Oat::Adapters::JsonAPI
-
+class OrganizationSerializer < BaseSerializer
   schema do
     type 'organization'
 
-    property :id, item.id
-    property :name, item.name
+    map_properties :id, :name
   end
 end

@@ -1,5 +1,7 @@
 class Image < ActiveRecord::Base
-  belongs_to :image_set
+  belongs_to :image_set, inverse_of: :images
+
+  validates :image_set, presence: true
 
   validates :url, presence: true
   validates :image_type,

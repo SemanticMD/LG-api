@@ -1,7 +1,4 @@
-require 'oat/adapters/json_api'
-class OrganizationsSerializer < Oat::Serializer
-  adapter Oat::Adapters::JsonAPI
-
+class OrganizationsSerializer < BaseSerializer
   schema do
     type 'organizations'
 

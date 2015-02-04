@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150128033845) do
+ActiveRecord::Schema.define(version: 20150204151358) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,7 +69,7 @@ ActiveRecord::Schema.define(version: 20150128033845) do
 
   create_table "images", force: :cascade do |t|
     t.string   "image_type"
-    t.integer  "image_set_id",                 null: false
+    t.integer  "image_set_id"
     t.boolean  "is_public",    default: false
     t.string   "url",                          null: false
     t.datetime "created_at",                   null: false
@@ -77,12 +77,13 @@ ActiveRecord::Schema.define(version: 20150128033845) do
   end
 
   create_table "lions", force: :cascade do |t|
-    t.string   "name",            null: false
+    t.string   "name",                 null: false
     t.integer  "organization_id"
     t.string   "gender"
     t.string   "age"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.integer  "primary_image_set_id"
   end
 
   add_index "lions", ["name"], name: "index_lions_on_name", unique: true, using: :btree
@@ -94,15 +95,16 @@ ActiveRecord::Schema.define(version: 20150128033845) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",               default: "", null: false
+    t.string   "email",                default: "", null: false
     t.integer  "organization_id"
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
-    t.string   "encrypted_password",  default: "", null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.string   "encrypted_password",   default: "", null: false
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",       default: 0,  null: false
+    t.integer  "sign_in_count",        default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
+    t.string   "authentication_token"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
