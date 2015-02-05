@@ -1,6 +1,14 @@
 require 'rails_helper'
 RSpec.describe ImageSetsController, :type => :controller do
 
+  describe '#show' do
+    let!(:image_set) { Fabricate(:image_set) }
+    let(:request) { ->{ get :show, id: image_set.id } }
+    before { request.call }
+    subject { response }
+    it { expect(subject).to serialize_to(ImageSetSerializer, image_set) }
+  end
+
   describe '#create' do
     let(:user) { Fabricate(:user) }
     let(:params) {

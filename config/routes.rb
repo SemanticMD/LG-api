@@ -9,6 +9,8 @@ Rails.application.routes.draw do
 
   # Paths must be CamelCase
 
+  resources :cv_requests, only:[:create, :show], path: 'cvRequests'
+  resources :cv_results, only:[:index], path: 'cvResults'
   resources :image_sets, only:[:create, :show, :update], path: 'imageSets'
   resources :images, only:[:create, :show, :update]
   resources :lions, only:[:show, :index]
