@@ -14,6 +14,6 @@ class LionsController < ApiController
   private
 
   def search_params
-    params.permit(:age, :gender)
+    params.permit(:age, :gender, :organization_id, :name)
   end
 end
