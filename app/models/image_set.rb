@@ -12,4 +12,14 @@ class ImageSet < ActiveRecord::Base
   belongs_to  :main_image, class_name: 'Image'
 
   accepts_nested_attributes_for :images
+
+  validate :main_image_in_image_set
+
+  private
+
+  def main_image_in_image_set
+    if main_image && !images.include?(main_image)
+      errors.add(:main_image, 'must be included in images')
+    end
+  end
 end
