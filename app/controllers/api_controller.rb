@@ -9,4 +9,12 @@ class ApiController < ApplicationController
 
     attrs
   end
+
+  def error_not_found(message='not found')
+    render status: 404, json: {
+             code: '404',
+             error: 'not_found',
+             message: message
+           }
+  end
 end
