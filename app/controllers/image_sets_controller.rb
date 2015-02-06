@@ -1,26 +1,33 @@
 class ImageSetsController < ApiController
+  before_filter :require_image_set, except: [:create]
+
   def create
     @image_set = ImageSet.create(expanded_params)
-    render json: ImageSetSerializer.new(@image_set)
+
+    render_image_set
   end
 
   def update
-    @image_set = ImageSet.find(params[:id])
-    # TODO ERROR NOT FOUND UNLESS @image_set
-
     @image_set.update(expanded_params)
     @image_set.save
 
-    render json: ImageSetSerializer.new(@image_set)
+    render_image_set
   end
 
   def show
-    @image_set = ImageSet.find(params[:id])
-    # TODO ERROR NOT FOUND UNLESS @image_set
-    render json: ImageSetSerializer.new(@image_set)
+    render_image_set
   end
 
   private
+
+  def require_image_set
+    @image_set = ImageSet.find_by_id(params[:id])
+    return error_not_found('image set not found') unless @image_set
+  end
+
+  def render_image_set
+    render json: ImageSetSerializer.new(@image_set)
+  end
 
   def expanded_params
     @uploading_user = User.find_by_id(image_set_params[:user_id])

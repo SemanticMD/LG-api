@@ -7,6 +7,12 @@ RSpec.describe ImageSetsController, :type => :controller do
     before { request.call }
     subject { response }
     it { expect(subject).to serialize_to(ImageSetSerializer, image_set) }
+
+    describe 'not found' do
+      let(:request) { ->{ get :show, id: 'bad id' } }
+      before { request.call }
+      it { expect(subject).to error_not_found_with('image set not found') }
+    end
   end
 
   describe '#create' do
