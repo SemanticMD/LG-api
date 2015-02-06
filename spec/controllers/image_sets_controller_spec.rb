@@ -53,7 +53,7 @@ RSpec.describe ImageSetsController, :type => :controller do
   end
 
   describe '#update' do
-    let(:image_set) { Fabricate :image_set_with_images }
+    let(:image_set) { Fabricate :image_set_with_images, main_image: nil }
     let(:main_image) { image_set.images.first }
     let(:request) { -> { put :update, id: image_set.id, image_set: params } }
     let(:params) {
