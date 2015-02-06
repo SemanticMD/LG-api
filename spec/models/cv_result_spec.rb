@@ -22,4 +22,11 @@ RSpec.describe CvResult, :type => :model do
       it { should_not be_valid }
     end
   end
+
+  describe 'can fetch associated lion' do
+    let(:lion) { Fabricate :lion }
+    let(:cv_result) { Fabricate :cv_result, image: lion.primary_image_set.main_image }
+
+    it { expect(cv_result.lion).to eq lion }
+  end
 end

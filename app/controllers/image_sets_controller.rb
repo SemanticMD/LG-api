@@ -20,11 +20,6 @@ class ImageSetsController < ApiController
 
   private
 
-  def require_image_set
-    @image_set = ImageSet.find_by_id(params[:id])
-    return error_not_found('image set not found') unless @image_set
-  end
-
   def render_image_set
     render json: ImageSetSerializer.new(@image_set)
   end

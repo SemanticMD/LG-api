@@ -5,6 +5,8 @@ class ApiController < ApplicationController
 
   rescue_from Errors::AuthenticationError, with: :deny_access
 
+  private
+
   # Add _attributes to keys for nested json objects coming from client.
   def rename_nested_attributes(attrs, keys)
     keys.each do |key|
@@ -21,8 +23,6 @@ class ApiController < ApplicationController
              message: message
            }
   end
-
-  private
 
   def deny_access
     render status: 401, json: {
@@ -47,5 +47,11 @@ class ApiController < ApplicationController
 
   def require_authenticated_user!
     raise Errors::AuthenticationError if !user_signed_in?
+  end
+
+  def require_image_set
+    @image_set = ImageSet.find_by_id(params[:id]) ||
+                 ImageSet.find_by_id(params[:image_set_id])
+    return error_not_found('image set not found') unless @image_set
   end
 end

@@ -27,9 +27,9 @@ RSpec.describe CvRequestsController, :type => :controller do
       before { request.call }
       subject { CvRequest.last }
       it {
-        subject.image_set.should eq image_set
-        subject.uploading_organization.should eq image_set.uploading_organization
-        subject.status.should eq 'created'
+        expect(subject.image_set).to eq image_set
+        expect(subject.uploading_organization).to eq image_set.uploading_organization
+        expect(subject.status).to eq 'created'
       }
     end
   end
