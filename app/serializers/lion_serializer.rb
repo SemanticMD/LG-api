@@ -2,7 +2,7 @@ class LionSerializer < BaseSerializer
   schema do
     type 'lion'
 
-    map_properties :id, :name, :primary_image_set_id
+    map_properties :id, :name, :primary_image_set_id, :gender, :age
 
     # entity :primate_image_set, item.primary_image_set, ImageSetSerializer
     entities :image_sets, item.image_sets, ImageSetSerializer
