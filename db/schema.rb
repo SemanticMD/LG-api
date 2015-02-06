@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150204151358) do
+ActiveRecord::Schema.define(version: 20150205225145) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,6 +48,28 @@ ActiveRecord::Schema.define(version: 20150204151358) do
 
   add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "cv_requests", force: :cascade do |t|
+    t.integer  "uploading_organization_id", null: false
+    t.integer  "image_set_id",              null: false
+    t.string   "status"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "cv_requests", ["image_set_id"], name: "index_cv_requests_on_image_set_id", using: :btree
+  add_index "cv_requests", ["uploading_organization_id", "status"], name: "index_cv_requests_on_uploading_organization_id_and_status", using: :btree
+
+  create_table "cv_results", force: :cascade do |t|
+    t.integer  "cv_request_id",     null: false
+    t.integer  "image_id",          null: false
+    t.float    "match_probability", null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "cv_results", ["cv_request_id"], name: "index_cv_results_on_cv_request_id", using: :btree
+  add_index "cv_results", ["image_id"], name: "index_cv_results_on_image_id", using: :btree
 
   create_table "image_sets", force: :cascade do |t|
     t.integer  "lion_id"
