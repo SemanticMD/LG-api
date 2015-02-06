@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
+  devise_for :users, controllers: { sessions: 'sessions' }
+
   ActiveAdmin.routes(self)
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -16,6 +19,7 @@ Rails.application.routes.draw do
   resources :lions, only:[:show, :index]
   resources :organizations, only: [:index]
   resources :uploads, only:[:create]
+  resources :users, only:[:show]
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
