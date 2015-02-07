@@ -1,4 +1,5 @@
 Fabricator(:user) do
   email { Faker::Internet.email }
+  password { Faker::Internet.password }
   organization
 end
