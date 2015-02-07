@@ -1,60 +1,51 @@
 require 'rails_helper'
 RSpec.describe ImageSetsController, :type => :controller do
+  let(:resource) { Fabricate :user }
+  before { sign_in resource }
+  subject { request.call }
 
   describe '#show' do
     let!(:image_set) { Fabricate(:image_set) }
     let(:request) { ->{ get :show, id: image_set.id } }
-    before { request.call }
-    subject { response }
+
+    it_behaves_like "an authenticated controller"
     it { expect(subject).to serialize_to(ImageSetSerializer, image_set) }
 
     describe 'not found' do
       let(:request) { ->{ get :show, id: 'bad id' } }
-      before { request.call }
       it { expect(subject).to error_not_found_with('image set not found') }
     end
   end
 
   describe '#create' do
     let(:user) { Fabricate(:user) }
-    let(:params) {
-      {
+    let(:params) { {
+      image_set: {
+        latitude: '-9.0000',
+        longitude: '37.4000',
+        user_id: user.id
+      }
+    } }
+    let(:request) { ->{ post :create, params } }
+
+    it_behaves_like "an authenticated controller"
+    it { expect { subject }.to change { ImageSet.count }.by(1) }
+
+    describe 'with nested images' do
+      let(:params) { {
         image_set: {
           latitude: '-9.0000',
           longitude: '37.4000',
-          user_id: user.id
+          user_id: user.id,
+          images: [
+            Fabricate.attributes_for(:new_image_wo_image_set),
+            Fabricate.attributes_for(:new_image_wo_image_set)
+          ]
         }
-      }
-    }
+      } }
 
-    let(:request) { ->{ post :create, params } }
-
-    it {
-      expect { request.call }.to change { ImageSet.count }.by(1)
-    }
-
-    describe 'with nested images' do
-      let(:params) {
-        {
-          image_set: {
-            latitude: '-9.0000',
-            longitude: '37.4000',
-            user_id: user.id,
-            images: [
-              Fabricate.attributes_for(:new_image_wo_image_set),
-              Fabricate.attributes_for(:new_image_wo_image_set)
-            ]
-          }
-        }
-      }
-
-      it {
-        expect { request.call }.to change { ImageSet.count }.by(1)
-      }
-
-      it {
-        expect { request.call }.to change { Image.count }.by(2)
-      }
+      it { expect { subject }.to change { ImageSet.count }.by(1) }
+      it { expect { subject }.to change { Image.count }.by(2) }
     end
   end
 
@@ -70,8 +61,8 @@ RSpec.describe ImageSetsController, :type => :controller do
     }
 
     it {
-      expect { request.call }.to change { image_set.reload.main_image }.
-                                  from(nil).to(main_image)
+      expect { subject }.to \
+        change { image_set.reload.main_image }.from(nil).to(main_image)
     }
   end
 end

@@ -38,6 +38,17 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
+  config.profile_examples = 10
+
+  if config.files_to_run.one?
+    # Use the documentation formatter for detailed output,
+    # unless a formatter has already been configured
+    # (e.g. via a command-line flag).
+    config.default_formatter = 'doc'
+  end
+
+  config.order = :random
+
 # The settings below are suggested to provide a good initial experience
 # with RSpec, but feel free to customize to your heart's content.
 =begin
