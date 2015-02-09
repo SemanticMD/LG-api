@@ -1,5 +1,12 @@
 class ImageSetsController < ApiController
-  before_filter :require_image_set, except: [:create]
+  before_filter :require_image_set, except: [:create, :index]
+  before_filter :require_organization, only: [:index]
+  before_filter :require_current_user_in_organization, only: [:index]
+
+  def index
+    @image_sets = @organization.image_sets
+    render json: ImageSetsSerializer.new(@image_sets)
+  end
 
   def create
     @image_set = ImageSet.create(expanded_params)
@@ -29,7 +36,8 @@ class ImageSetsController < ApiController
     @uploading_organization = @uploading_user.organization
     _params = image_set_params.except(:user_id)
       .merge({:uploading_user => @uploading_user,
-              :uploading_organization => @uploading_organization})
+              :uploading_organization => @uploading_organization,
+              :organization => @uploading_organization})
 
     rename_nested_attributes(_params, [:images, :main_image])
   end

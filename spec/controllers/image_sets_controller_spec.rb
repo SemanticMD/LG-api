@@ -17,6 +17,29 @@ RSpec.describe ImageSetsController, :type => :controller do
     end
   end
 
+  describe '#index' do
+    let(:request) { -> { get :index, params } }
+    let(:params) { {} }
+    let(:user) { resource }
+    let!(:image_set) { Fabricate(:image_set, organization: user.organization) }
+
+    it_behaves_like "an authenticated controller"
+
+    context 'no organization id' do
+      it { expect(subject).to error_not_found }
+    end
+
+    context 'wrong organization id' do
+      let(:params) { { organization_id: 'bad_id' } }
+      it { expect(subject).to error_not_found }
+    end
+
+    context 'correct organization id' do
+      let(:params) { { organization_id: user.organization.id } }
+      it { expect(subject).to serialize_to(ImageSetsSerializer, [image_set]) }
+    end
+  end
+
   describe '#create' do
     let(:user) { Fabricate(:user) }
     let(:params) { {

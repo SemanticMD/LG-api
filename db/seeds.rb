@@ -4,12 +4,13 @@ lion_img_url_3 = "https://lg-201-created-development.s3.amazonaws.com/uploads%2F
 
 lg = Organization.create(name: 'Lion Guardians')
 org201 = Organization.create(name: '201 Created')
-user = User.create(email: 'email@d.com', password: 'password', organization: lg)
+user = User.create(email: 'justin@lg.org', password: 'password', organization: lg)
 
 image_set_1 = ImageSet.create(
   {
     uploading_organization: lg,
     uploading_user: user,
+    organization: lg,
     images_attributes: [
       {url: lion_img_url_1, image_type: 'cv'},
       {url: lion_img_url_2, image_type: 'whisker'},
@@ -27,12 +28,13 @@ lion_1.primary_image_set = image_set_1
 lion_1.save
 
 
-user2 = User.create(email: 'u2@d.com', password: 'password', organization: org201)
+user2 = User.create(email: 'isaac@lg.org', password: 'password', organization: org201)
 
 image_set_2 = ImageSet.create(
   {
     uploading_organization: org201,
     uploading_user: user2,
+    organization: org201,
     images_attributes: [
       {url: lion_img_url_1, image_type: 'cv'},
       {url: lion_img_url_2, image_type: 'whisker'},
@@ -48,3 +50,20 @@ lion_2 = Lion.create({name: 'Lauren', gender: 'female', age: '26', organization:
 lion_2.image_sets << image_set_2
 lion_2.primary_image_set = image_set_2
 lion_2.save
+
+image_set_3 = ImageSet.create(
+  {
+    uploading_organization: lg,
+    uploading_user: user,
+    organization: lg,
+    images_attributes: [
+      {url: lion_img_url_1, image_type: 'cv'},
+      {url: lion_img_url_2, image_type: 'whisker'},
+      {url: lion_img_url_3, image_type: 'markings'}
+    ]
+  }
+)
+
+image_set_3.main_image = image_set_3.images[1]
+image_set_3.save
+lion_1.images << image_set_3

@@ -1,7 +1,9 @@
 class ImageSet < ActiveRecord::Base
   belongs_to :lion
-  belongs_to :organization, -> { where is_verified: true },
-                            foreign_key: 'owner_organization_id'
+
+  # organization starts same as uploading_organization but then
+  # can be assigned to a different one
+  belongs_to :organization, foreign_key: 'owner_organization_id'
 
   belongs_to :uploading_organization, class_name: 'Organization',
                                       foreign_key: 'uploading_organization_id'

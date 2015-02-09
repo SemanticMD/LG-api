@@ -54,4 +54,15 @@ class ApiController < ApplicationController
                  ImageSet.find_by_id(params[:image_set_id])
     return error_not_found('image set not found') unless @image_set
   end
+
+  def require_organization
+    @organization = Organization.find_by_id(params[:organization_id])
+    return error_not_found('org not found') unless @organization
+  end
+
+  def require_current_user_in_organization
+    unless @organization == current_user.organization
+      return error_not_found('user has no access to organization')
+    end
+  end
 end
