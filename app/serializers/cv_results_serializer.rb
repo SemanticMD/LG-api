@@ -2,6 +2,6 @@ class CvResultsSerializer < BaseSerializer
   schema do
     type 'cv_results'
 
-    collection :cv_resuilts, item, CvResultSerializer
+    collection :cv_results, item, CvResultSerializer
   end
 end
