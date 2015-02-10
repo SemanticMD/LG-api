@@ -24,11 +24,11 @@ class ApiController < ApplicationController
            }
   end
 
-  def deny_access
+  def deny_access(message='User must be signed in')
     render status: 401, json: {
       code: '401',
       error: 'unathenticated',
-      message: 'User must be signed in'
+      message: message
     }
   end
 
@@ -53,6 +53,11 @@ class ApiController < ApplicationController
     @image_set = ImageSet.find_by_id(params[:id]) ||
                  ImageSet.find_by_id(params[:image_set_id])
     return error_not_found('image set not found') unless @image_set
+  end
+
+  def require_image_set_ownership
+    user_owns_image_set = @image_set.organization == current_user.organization
+    return deny_access('user cannot delete image set') unless user_owns_image_set
   end
 
   def require_organization
