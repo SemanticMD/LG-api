@@ -1,5 +1,6 @@
 class ImageSetsController < ApiController
   before_filter :require_image_set, except: [:create, :index]
+  before_filter :require_image_set_ownership, only: [:destroy, :update]
   before_filter :require_organization, only: [:index]
   before_filter :require_current_user_in_organization, only: [:index]
 
@@ -25,6 +26,12 @@ class ImageSetsController < ApiController
     render_image_set
   end
 
+  def destroy
+    @image_set.destroy
+
+    render json: {}, status: 204
+  end
+
   private
 
   def render_image_set
@@ -45,6 +52,7 @@ class ImageSetsController < ApiController
   def image_set_params
     params.require(:image_set).
       permit(
+          :id,
           :url,
           :lion,
           :user_id,

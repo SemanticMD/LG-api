@@ -14,7 +14,7 @@ Rails.application.routes.draw do
 
   resources :cv_requests, only:[:create, :show], path: 'cvRequests'
   resources :cv_results, only:[:index], path: 'cvResults'
-  resources :image_sets, only:[:create, :show, :update, :index], path: 'imageSets'
+  resources :image_sets, only:[:create, :show, :update, :destroy, :index], path: 'imageSets'
   resources :images, only:[:create, :show, :update]
   resources :lions, only:[:show, :index]
   resources :organizations, only: [:index]

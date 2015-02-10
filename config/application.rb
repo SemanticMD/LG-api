@@ -37,7 +37,7 @@ module LionGuardiansApi
       allow do
         origins '*'
         cors_params = { headers: %w(Accept Authorization Content-Type),
-                        methods: [:options, :patch, :get, :post, :put],
+                        methods: [:options, :patch, :get, :post, :delete, :put],
                         credentials: true }
 
         %w(/*).each do |resource_path|
