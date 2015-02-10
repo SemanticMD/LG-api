@@ -28,4 +28,27 @@ RSpec.describe ImageSet, :type => :model do
 
     it { expect(image_set.cv_results).to include cv_result }
   end
+
+  describe 'images does not include deleted images' do
+    let(:image_set) { Fabricate :image_set_with_images }
+    let(:deleted_image) { image_set.images.last }
+    before {
+      deleted_image.update(is_deleted: true)
+      deleted_image.save
+    }
+
+    it { expect(image_set.images.reload).to_not include deleted_image }
+  end
+
+  describe 'destroying hides all images' do
+    let!(:image_set) { Fabricate :image_set_with_images }
+
+    it {
+      image_set.images.each { |image|
+        expect(image).to receive(:hide)
+      }
+
+      image_set.destroy
+    }
+  end
 end

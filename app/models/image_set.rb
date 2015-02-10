@@ -10,8 +10,8 @@ class ImageSet < ActiveRecord::Base
   belongs_to :uploading_user, class_name: 'User',
                               foreign_key: 'uploading_user_id'
 
-  has_many :images, inverse_of: :image_set
-  belongs_to  :main_image, class_name: 'Image'
+  has_many :images, ->{ where is_deleted: false }, inverse_of: :image_set
+  belongs_to :main_image, ->{ where is_deleted: false }, class_name: 'Image'
 
   has_one :cv_request
   has_many :cv_results, through: :cv_request
@@ -20,7 +20,13 @@ class ImageSet < ActiveRecord::Base
 
   validate :main_image_in_image_set
 
+  before_destroy :hide_images
+
   private
+
+  def hide_images
+    images.each { |image| image.hide }
+  end
 
   def main_image_in_image_set
     if main_image && !images.include?(main_image)

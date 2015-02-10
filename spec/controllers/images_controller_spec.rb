@@ -29,7 +29,8 @@ RSpec.describe ImagesController, :type => :controller do
   end
 
   describe '#update' do
-    let!(:image) { Fabricate(:public_image) }
+    let(:user) { resource }
+    let!(:image) { Fabricate(:public_image, image_set: Fabricate(:image_set, organization: user.organization)) }
     let(:new_url) { 'isaacezer.com' }
     let(:params) { {
       url: new_url,
@@ -43,5 +44,28 @@ RSpec.describe ImagesController, :type => :controller do
       expect { subject }.to \
         change{ image.reload.is_public }.from(true).to(false)
     }
+  end
+
+  describe '#destroy' do
+    let(:user) { resource }
+    let!(:image_set) { Fabricate :image_set_with_1_image, organization: user.organization }
+    let(:image) { image_set.images.first }
+
+    let(:request) { -> { delete :destroy, id: image.id } }
+
+    it_behaves_like "an authenticated controller"
+    it {
+      expect {subject}.to change{ image.reload.is_deleted }.from(false).to(true)
+    }
+
+    describe 'not found' do
+      let(:request) { ->{ delete :destroy, id: 'bad id' } }
+      it { expect(subject).to error_not_found_with('image not found') }
+    end
+
+    describe 'user does not own image set' do
+      let!(:image_set) { Fabricate :image_set_with_1_image }
+      it { expect(subject).to error_deny_access }
+    end
   end
 end

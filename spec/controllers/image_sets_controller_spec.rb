@@ -108,8 +108,7 @@ RSpec.describe ImageSetsController, :type => :controller do
     it_behaves_like "an authenticated controller"
     it { expect { subject }.to change { ImageSet.count }.by(-1) }
 
-    #eventually this should delete images as well, in a delayed queue most likely
-    xit { expect { subject }.to change { Image.count }.by(5) }
+    it { expect { subject }.to change { Image.where(is_deleted: true).count }.by(5) }
 
     describe 'not found' do
       let(:request) { ->{ delete :destroy, id: 'bad id' } }

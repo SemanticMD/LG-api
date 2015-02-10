@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150206195604) do
+ActiveRecord::Schema.define(version: 20150210162119) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -96,7 +96,10 @@ ActiveRecord::Schema.define(version: 20150206195604) do
     t.string   "url",                          null: false
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
+    t.boolean  "is_deleted",   default: false
   end
+
+  add_index "images", ["image_set_id", "is_deleted"], name: "index_images_on_image_set_id_and_is_deleted", where: "(is_deleted IS NOT TRUE)", using: :btree
 
   create_table "lions", force: :cascade do |t|
     t.string   "name",                 null: false
