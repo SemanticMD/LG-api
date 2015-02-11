@@ -37,4 +37,22 @@ RSpec.describe LionsController, :type => :controller do
       it { expect(subject).to serialize_to(LionsSerializer, [lion2]) }
     end
   end
+
+  describe '#create' do
+    let(:name) { 'isaac' }
+    let(:image_set) { Fabricate :image_set }
+    let(:params) {
+      {
+        lion: {
+          main_image_set_id: image_set.id,
+          name: name
+        }
+      }
+    }
+    let(:request) { ->{ post :create, params } }
+
+    it_behaves_like "an authenticated controller"
+    it { expect { subject }.to change { Lion.count }.by(1) }
+    it { expect(subject).to serialize_to(LionSerializer, Lion.all.last) }
+  end
 end

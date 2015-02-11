@@ -2,6 +2,8 @@ Fabricator(:image_set) do
   organization
   uploading_organization { Fabricate :organization }
   uploading_user { Fabricate :user }
+  age 30
+  gender 'male'
 end
 
 Fabricator(:image_set_with_images, from: :image_set) do

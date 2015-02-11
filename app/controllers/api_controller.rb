@@ -32,6 +32,14 @@ class ApiController < ApplicationController
     }
   end
 
+  def error_invalid_resource(message='invalid resource')
+    render status: 422, json: {
+             code: '422',
+             error: 'invalid_resource',
+             message: message
+           }
+  end
+
   def authenticate_user_from_token!
     # An 'Authorization: Token <token>,email=<email>'
     # header must be sent from ember
