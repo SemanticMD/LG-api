@@ -12,7 +12,7 @@ class LionsController < ApiController
   end
 
   def create
-    @image_set = ImageSet.find_by_id(creation_params[:main_image_set_id])
+    @image_set = ImageSet.find_by_id(creation_params[:primary_image_set_id])
     return error_not_found('image_set for lion creation not found') unless @image_set
     return error_invalid_resource('image_set already associated with lion') if @image_set.lion.present?
 
@@ -25,7 +25,13 @@ class LionsController < ApiController
   private
 
   def creation_params
-    params.require(:lion).permit(:main_image_set_id, :name)
+    params.require(:lion).permit(
+      :primary_image_set_id,
+      :name,
+      :age,
+      :gender,
+      :organization_id
+    )
   end
 
   def search_params

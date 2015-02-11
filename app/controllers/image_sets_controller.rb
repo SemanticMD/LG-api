@@ -54,7 +54,7 @@ class ImageSetsController < ApiController
       permit(
           :id,
           :url,
-          :lion,
+          :lion_id,
           :user_id,
           :age,
           :name,

@@ -44,7 +44,7 @@ RSpec.describe LionsController, :type => :controller do
     let(:params) {
       {
         lion: {
-          main_image_set_id: image_set.id,
+          primary_image_set_id: image_set.id,
           name: name
         }
       }
