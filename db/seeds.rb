@@ -66,4 +66,38 @@ image_set_3 = ImageSet.create(
 
 image_set_3.main_image = image_set_3.images[1]
 image_set_3.save
-lion_1.images << image_set_3
+lion_1.image_sets << image_set_3
+
+image_set_cv = ImageSet.create(
+  {
+    uploading_organization: lg,
+    uploading_user: user,
+    organization: lg,
+    images_attributes: [
+      {url: lion_img_url_1, image_type: 'cv'},
+      {url: lion_img_url_2, image_type: 'whisker'},
+      {url: lion_img_url_3, image_type: 'markings'}
+    ]
+  }
+)
+
+image_set_cv.main_image = image_set_cv.images.first
+image_set_cv.save
+
+cv_request = CvRequest.create(
+  image_set: image_set_cv,
+  uploading_organization: lg,
+  status: 'results_received'
+)
+
+CvResult.create(
+  cv_request: cv_request,
+  match_probability: 0.8,
+  image: lion_1.primary_image_set.main_image
+)
+
+CvResult.create(
+  cv_request: cv_request,
+  match_probability: 0.7,
+  image: lion_2.primary_image_set.main_image
+)
