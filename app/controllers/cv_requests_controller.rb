@@ -12,13 +12,18 @@ class CvRequestsController < ApiController
 
     # TODO Error unless @image_set and @uploading_organization
 
-    @cv_request = CvRequest.create(
-      {
-        image_set: @image_set,
-        uploading_organization: @uploading_organization,
-        status: 'created'
-      }
-    )
+    # If there is already a CV Request for this image_set,
+    # return it
+    @cv_request = @image_set.cv_request
+    unless @cv_request
+      @cv_request = CvRequest.create(
+        {
+          image_set: @image_set,
+          uploading_organization: @uploading_organization,
+          status: 'created'
+        }
+      )
+    end
 
     render json: CvRequestSerializer.new(@cv_request)
   end

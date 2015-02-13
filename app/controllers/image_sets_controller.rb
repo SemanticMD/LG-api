@@ -1,11 +1,9 @@
 class ImageSetsController < ApiController
   before_filter :require_image_set, except: [:create, :index]
   before_filter :require_image_set_ownership, only: [:destroy, :update]
-  before_filter :require_organization, only: [:index]
-  before_filter :require_current_user_in_organization, only: [:index]
 
   def index
-    @image_sets = @organization.image_sets
+    @image_sets = search_results
     render json: ImageSetsSerializer.new(@image_sets)
   end
 
@@ -33,6 +31,29 @@ class ImageSetsController < ApiController
   end
 
   private
+
+  def search_results
+    if search_params.has_key?(:lions)
+      ImageSet.joins(:lion).where(search_params)
+    else
+      ImageSet.where(search_params)
+    end
+  end
+
+  def search_params
+    _params = params.permit(:age, :gender, :name, :organization_id)
+
+    if _params[:organization_id]
+      _params[:owner_organization_id] = _params.delete(:organization_id)
+    end
+
+    if _params[:name]
+      name = _params.delete(:name)
+      _params[:lions] = {name: name}
+    end
+
+    _params
+  end
 
   def render_image_set
     render json: ImageSetSerializer.new(@image_set)
