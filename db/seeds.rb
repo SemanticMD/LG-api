@@ -11,6 +11,8 @@ image_set_1 = ImageSet.create(
     uploading_organization: lg,
     uploading_user: user,
     organization: lg,
+    latitude: -2.6527,
+    longitude: 37.26058,
     images_attributes: [
       {url: lion_img_url_1, image_type: 'cv'},
       {url: lion_img_url_2, image_type: 'whisker'},
@@ -35,6 +37,8 @@ image_set_2 = ImageSet.create(
     uploading_organization: org201,
     uploading_user: user2,
     organization: org201,
+    latitude: -2.6527,
+    longitude: 37.26058,
     images_attributes: [
       {url: lion_img_url_1, image_type: 'cv'},
       {url: lion_img_url_2, image_type: 'whisker'},
@@ -56,6 +60,8 @@ image_set_3 = ImageSet.create(
     uploading_organization: lg,
     uploading_user: user,
     organization: lg,
+    latitude: -2.6527,
+    longitude: 37.26058,
     images_attributes: [
       {url: lion_img_url_1, image_type: 'cv'},
       {url: lion_img_url_2, image_type: 'whisker'},
@@ -73,6 +79,8 @@ image_set_cv = ImageSet.create(
     uploading_organization: lg,
     uploading_user: user,
     organization: lg,
+    latitude: -2.6527,
+    longitude: 37.26058,
     images_attributes: [
       {url: lion_img_url_1, image_type: 'cv'},
       {url: lion_img_url_2, image_type: 'whisker'},
