@@ -21,23 +21,39 @@ RSpec.describe ImageSetsController, :type => :controller do
     let(:request) { -> { get :index, params } }
     let(:params) { {} }
     let(:user) { resource }
-    let!(:image_set) { Fabricate(:image_set, organization: user.organization) }
+    let!(:image_set) { Fabricate(:image_set, gender: 'male',
+                                 organization: user.organization) }
+    let!(:image_set_2) { Fabricate(:image_set, gender: 'female') }
 
     it_behaves_like "an authenticated controller"
 
-    context 'no organization id' do
-      it { expect(subject).to error_not_found }
+    context 'no organization id returns all results' do
+      it { expect(subject).to serialize_to(ImageSetsSerializer,
+                                           [image_set, image_set_2]) }
     end
 
-    context 'wrong organization id' do
+    context 'wrong organization id returns nothing' do
       let(:params) { { organization_id: 'bad_id' } }
-      it { expect(subject).to error_not_found }
+      it { expect(subject).to serialize_to(ImageSetsSerializer, []) }
     end
 
-    context 'correct organization id' do
+    context 'search by organization id' do
       let(:params) { { organization_id: user.organization.id } }
       it { expect(subject).to serialize_to(ImageSetsSerializer, [image_set]) }
     end
+
+    context 'search by gender' do
+      let(:params) { { gender: 'female' } }
+      it { expect(subject).to serialize_to(ImageSetsSerializer, [image_set_2]) }
+    end
+
+    context 'search by name' do
+      let(:lion) { Fabricate :lion }
+      let(:image_set_3) { lion.primary_image_set }
+      let(:params) { { name: lion.name } }
+      it { expect(subject).to serialize_to(ImageSetsSerializer, [image_set_3]) }
+    end
+
   end
 
   describe '#create' do
