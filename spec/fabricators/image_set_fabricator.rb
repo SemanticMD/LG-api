@@ -2,7 +2,7 @@ Fabricator(:image_set) do
   organization
   uploading_organization { Fabricate :organization }
   uploading_user { Fabricate :user }
-  age 30
+  date_of_birth 30.years.ago
   gender 'male'
 end
 

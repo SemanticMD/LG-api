@@ -13,7 +13,7 @@ class Lion < ActiveRecord::Base
       organization: image_set.organization,
       name: name,
       gender: image_set.gender,
-      age: image_set.age
+      date_of_birth: image_set.date_of_birth
     )
 
     lion.image_sets << image_set
@@ -21,6 +21,17 @@ class Lion < ActiveRecord::Base
     lion.save
 
     lion
+  end
+
+  def self.search(search_params)
+    age_params = search_params.extract!(:dob_range_start, :dob_range_end)
+
+    unless age_params.empty?
+      dob_hash = { date_of_birth: (age_params[:dob_range_start]..age_params[:dob_range_end]) }
+      search_params.merge!(dob_hash)
+    end
+
+    Lion.where(search_params)
   end
 
   private
