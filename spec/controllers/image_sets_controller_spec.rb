@@ -91,7 +91,8 @@ RSpec.describe ImageSetsController, :type => :controller do
   describe '#update' do
     let(:user) { resource }
     let(:image_set) { Fabricate :image_set_with_images, main_image: nil, organization: user.organization }
-    let(:main_image) { image_set.images.first }
+    let(:main_image) { image_set.images.first.tap { |image|
+                         image.update(is_public: true) } }
     let(:request) { -> { put :update, id: image_set.id, image_set: params } }
     let(:params) {
       {
@@ -113,6 +114,44 @@ RSpec.describe ImageSetsController, :type => :controller do
     describe 'user does not own image set' do
       let(:user) { Fabricate :user }
       it { expect(subject).to error_deny_access }
+    end
+
+    describe 'invalid main image' do
+      let(:main_image) { image_set.images.first }
+      it {
+        expect(subject).to error_invalid_resource_with(
+                             {
+                               main_image: ['must be publicly accessible']
+                             })
+      }
+    end
+
+    describe 'duplicate lion id' do
+      before { image_set.update(lion: Fabricate(:lion)) }
+      let(:new_lion) { Fabricate :lion }
+      let(:params) {
+        { lion_id: new_lion.id }
+      }
+
+      it {
+        expect(subject).to error_invalid_resource_with(
+                             {
+                               lion: ["#{image_set.id} already associated with a different lion #{image_set.lion.name}"]
+                             })
+      }
+    end
+
+    describe 'bad lion id' do
+      let(:params) {
+        { lion_id: 'bad id' }
+      }
+
+      it {
+        expect(subject).to error_invalid_resource_with(
+                             {
+                               lion: ["can't be blank"]
+                             })
+      }
     end
   end
 

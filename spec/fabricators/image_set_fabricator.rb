@@ -8,10 +8,18 @@ end
 
 Fabricator(:image_set_with_images, from: :image_set) do
   images(count: 5)
-  main_image { |attrs| attrs[:images].first }
+  main_image {
+    |attrs| attrs[:images].first.tap{
+      |image| image.update(is_public: true)
+    }
+  }
 end
 
 Fabricator(:image_set_with_1_image, from: :image_set) do
   images(count: 1)
-  main_image { |attrs| attrs[:images].first }
+  main_image {
+    |attrs| attrs[:images].first.tap {
+      |image| image.update(is_public: true)
+    }
+  }
 end

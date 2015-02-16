@@ -6,6 +6,8 @@ class Image < ActiveRecord::Base
     :inclusion  => { :in => [ 'cv', 'full-body', 'whisker', 'main-id', 'markings' ],
     :message    => "%{value} is not a valid image type" }
 
+  scope :is_public, ->{ where(is_public: true) }
+
   def hide
     update(is_deleted: true)
   end

@@ -32,11 +32,10 @@ class ApiController < ApplicationController
     }
   end
 
-  def error_invalid_resource(message='invalid resource')
+  def error_invalid_resource(errors={})
     render status: 422, json: {
              code: '422',
-             error: 'invalid_resource',
-             message: message
+             errors: errors
            }
   end
 
