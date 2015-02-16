@@ -6,8 +6,9 @@ class CvResultSerializer < BaseSerializer
 
     if item.lion
       entity :lion, item.lion, LionSerializer
+      property :image_set_id, item.image_set.id
+    else
+      entity :image_set, item.image_set, ImageSetSerializer, embedded: true
     end
-
-    entity :image_set, item.image_set, ImageSetSerializer
   end
 end
