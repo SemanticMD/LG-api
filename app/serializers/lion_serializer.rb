@@ -2,7 +2,7 @@ class LionSerializer < BaseSerializer
   schema do
     type 'lion'
 
-    map_properties :id, :name, :primary_image_set_id, :gender, :age
+    map_properties :id, :name, :primary_image_set_id, :gender, :date_of_birth
 
     # Avoid infinite circular embeds
     if context[:embedded]

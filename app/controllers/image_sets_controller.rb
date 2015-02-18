@@ -91,7 +91,7 @@ class ImageSetsController < ApiController
           :url,
           :lion_id,
           :user_id,
-          :age,
+          :date_of_birth,
           :name,
           :gender,
           :latitude,

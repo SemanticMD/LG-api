@@ -6,7 +6,7 @@ class LionsController < ApiController
   end
 
   def index
-    @lions = Lion.where(search_params)
+    @lions = Lion.search(search_params)
 
     render_lions
   end
@@ -43,13 +43,13 @@ class LionsController < ApiController
     params.require(:lion).permit(
       :primary_image_set_id,
       :name,
-      :age,
+      :date_of_birth,
       :gender,
       :organization_id
     )
   end
 
   def search_params
-    params.permit(:age, :gender, :organization_id, :name)
+    params.permit(:dob_range_start, :dob_range_end, :gender, :organization_id, :name)
   end
 end
