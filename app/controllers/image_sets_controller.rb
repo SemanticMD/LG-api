@@ -8,13 +8,13 @@ class ImageSetsController < ApiController
   end
 
   def create
-    @image_set = ImageSet.create(expanded_params)
+    @image_set = ImageSet.create(creation_params)
 
     render_image_set
   end
 
   def update
-    _params = expanded_params
+    _params = update_params
 
     old_lion = @image_set.lion
     new_lion_id = _params[:lion_id]
@@ -23,7 +23,7 @@ class ImageSetsController < ApiController
                lion: ["#{@image_set.id} already associated with a different lion #{old_lion.name}"]
              )
     else
-      @image_set.update(expanded_params)
+      @image_set.update(_params)
       @image_set.save
 
       render_image_set
@@ -73,10 +73,21 @@ class ImageSetsController < ApiController
     end
   end
 
-  def expanded_params
+  def update_params
+    _params = image_set_params
+
+    if _params[:organization_id]
+      _params[:owner_organization_id] = _params.delete(:organization_id)
+    end
+
+    rename_nested_attributes(_params, [:images, :main_image])
+  end
+
+  def creation_params
     @uploading_user = current_user
     @uploading_organization = @uploading_user.organization
-    _params = image_set_params.except(:user_id)
+
+    _params = image_set_params.except(:organization_id)
       .merge({:uploading_user => @uploading_user,
               :uploading_organization => @uploading_organization,
               :organization => @uploading_organization})
@@ -90,8 +101,8 @@ class ImageSetsController < ApiController
           :id,
           :url,
           :lion_id,
-          :user_id,
           :date_of_birth,
+          :organization_id,
           :name,
           :gender,
           :latitude,

@@ -57,12 +57,11 @@ RSpec.describe ImageSetsController, :type => :controller do
   end
 
   describe '#create' do
-    let(:user) { Fabricate(:user) }
+    let(:user) { resource }
     let(:params) { {
       image_set: {
         latitude: '-9.0000',
-        longitude: '37.4000',
-        user_id: user.id
+        longitude: '37.4000'
       }
     } }
     let(:request) { ->{ post :create, params } }
@@ -75,7 +74,6 @@ RSpec.describe ImageSetsController, :type => :controller do
         image_set: {
           latitude: '-9.0000',
           longitude: '37.4000',
-          user_id: user.id,
           images: [
             Fabricate.attributes_for(:new_image_wo_image_set),
             Fabricate.attributes_for(:new_image_wo_image_set)
@@ -96,8 +94,7 @@ RSpec.describe ImageSetsController, :type => :controller do
     let(:request) { -> { put :update, id: image_set.id, image_set: params } }
     let(:params) {
       {
-        main_image_id: main_image.id,
-        user_id: image_set.uploading_user.id
+        main_image_id: main_image.id
       }
     }
 
@@ -105,6 +102,20 @@ RSpec.describe ImageSetsController, :type => :controller do
       expect { subject }.to \
         change { image_set.reload.main_image }.from(nil).to(main_image)
     }
+
+    describe 'change organization' do
+      let(:new_organization) { Fabricate :organization }
+      let(:params) {
+        {
+          organization_id: new_organization.id
+        }
+      }
+
+      it {
+        expect { subject }.to \
+          change { image_set.reload.organization }.to(new_organization)
+      }
+    end
 
     describe 'not found' do
       let(:request) { ->{ put :update, id: 'bad id' } }
