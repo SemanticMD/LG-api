@@ -79,6 +79,61 @@ RSpec.describe LionsController, :type => :controller do
                              { name: ["can't be blank"] })
       }
     end
+  end
+
+  describe '#update' do
+    let(:user) { resource }
+    let(:lion) { Fabricate(:lion, name: 'Simba', organization: user.organization) }
+    let!(:primary_image_set) { lion.primary_image_set }
+    let(:new_image_set) { Fabricate(:image_set_with_1_image, lion: lion, organization: user.organization, uploading_organization: user.organization, uploading_user: user) }
+
+    let(:request) { -> { put :update, id: lion.id, lion: params } }
+
+    let(:params) {
+      {
+        name: 'Isaac',
+        primary_image_set_id: new_image_set.id }
+    }
+
+    it_behaves_like "an authenticated controller"
+
+    it {
+      expect {subject}.to change {lion.reload.primary_image_set}.from(primary_image_set).to(new_image_set)
+    }
+
+    it {
+      expect {subject}.to change {lion.reload.name}.from('Simba').to('Isaac')
+    }
+
+    describe 'user does not own image set' do
+      let(:user) { Fabricate :user }
+      it { expect(subject).to error_deny_access }
+    end
+
+    describe 'not found' do
+      let(:request) { ->{ put :update, id: 'bad id' } }
+      it { expect(subject).to error_not_found_with('lion not found') }
+    end
+  end
+
+  describe '#destroy' do
+    let(:user) { resource }
+    let!(:lion) { Fabricate(:lion, organization: user.organization) }
+    let(:request) { ->{ delete :destroy, id: lion.id } }
+
+    it_behaves_like "an authenticated controller"
+    it { expect { subject }.to change { Lion.count }.by(-1) }
+
+    describe 'not found' do
+      let(:request) { ->{ delete :destroy, id: 'bad id' } }
+      it { expect(subject).to error_not_found_with('lion not found') }
+    end
+
+    describe 'user does not own lion' do
+      let!(:lion) { Fabricate :lion }
+      let(:request) { ->{ delete :destroy, id: lion.id } }
+      it { expect(subject).to error_deny_access }
+    end
 
   end
 end

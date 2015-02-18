@@ -1,7 +1,8 @@
 class LionsController < ApiController
-  def show
-    @lion = Lion.find(params[:id])
+  before_filter :require_lion, except: [:create, :index]
+  before_filter :require_lion_ownership, only: [:update, :destroy]
 
+  def show
     render_lion
   end
 
@@ -25,7 +26,29 @@ class LionsController < ApiController
     render_lion
   end
 
+  def update
+    @lion.update(creation_params)
+
+    render_lion
+  end
+
+  def destroy
+    @lion.destroy
+
+    render json: {}, status: 204
+  end
+
   private
+
+  def require_lion
+    @lion = Lion.find_by_id(params[:id])
+    return error_not_found('lion not found') unless @lion
+  end
+
+  def require_lion_ownership
+    is_owner = @lion.organization == current_user.organization
+    return deny_access('user cannot edit lion') unless is_owner
+  end
 
   def render_lion
     if @lion.valid?
