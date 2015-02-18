@@ -2,9 +2,8 @@ class CvRequestSerializer < BaseSerializer
   schema do
     type 'cv_request'
 
-    map_properties :id, :status
+    map_properties :id, :status, :uploading_organization_id
 
     entity :image_set, item.image_set, ImageSetSerializer
-    entity :uploading_organization, item.uploading_organization, OrganizationSerializer
   end
 end

@@ -4,7 +4,7 @@ class CvRequest < ActiveRecord::Base
   has_many :cv_results
 
   validates :uploading_organization, presence: true
-  validates :image_set, presence: true
+  validates :image_set, presence: true, uniqueness: true
   validates :status, presence: true,
             inclusion: { in: [
                            'created', # In DB but not submitted to CV

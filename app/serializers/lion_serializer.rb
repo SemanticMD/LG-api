@@ -2,7 +2,8 @@ class LionSerializer < BaseSerializer
   schema do
     type 'lion'
 
-    map_properties :id, :name, :primary_image_set_id, :gender, :date_of_birth
+    map_properties :id, :name, :primary_image_set_id, :gender, :date_of_birth,
+                   :organization_id
 
     # Avoid infinite circular embeds
     if context[:embedded]
@@ -10,7 +11,5 @@ class LionSerializer < BaseSerializer
     else
       entities :image_sets, item.image_sets, ImageSetSerializer, embedded: true
     end
-
-    entity   :organization, item.organization, OrganizationSerializer if item.organization
   end
 end

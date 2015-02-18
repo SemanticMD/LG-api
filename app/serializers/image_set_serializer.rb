@@ -3,8 +3,10 @@ class ImageSetSerializer < BaseSerializer
     type 'image_set'
 
     map_properties :id, :is_verified, :latitude, :longitude,
-                   :gender, :date_of_birth, :main_image_id
+                   :gender, :date_of_birth, :main_image_id,
+                   :uploading_organization_id
 
+    property :organization_id, item.organization.id
     property :user_id, item.uploading_user_id
     property :main_image_id, item.main_image.id if item.main_image
     property :has_cv_results, !item.cv_results.empty?
@@ -12,8 +14,6 @@ class ImageSetSerializer < BaseSerializer
     property :has_cv_request, item.cv_request.present?
 
     entities :images, item.viewable_images(context[:current_user]), ImageSerializer
-
-    entity :uploading_organization, item.uploading_organization, OrganizationSerializer
 
     # Avoid infinite circular embeds
     if context[:embedded]

@@ -13,10 +13,9 @@ RSpec.describe CvRequestsController, :type => :controller do
   end
 
   describe '#create' do
-    let(:image_set) { Fabricate :image_set }
+    let(:image_set) { Fabricate :image_set, organization: resource.organization }
     let(:params) { {
       image_set_id: image_set.id,
-      uploading_organization_id: image_set.uploading_organization.id
     } }
     let(:request) { ->{post :create, cv_request: params } }
 
@@ -28,9 +27,29 @@ RSpec.describe CvRequestsController, :type => :controller do
       subject { CvRequest.last }
       it {
         expect(subject.image_set).to eq image_set
-        expect(subject.uploading_organization).to eq image_set.uploading_organization
+        expect(subject.uploading_organization).to eq image_set.organization
         expect(subject.status).to eq 'created'
       }
+    end
+
+    context 'duplicate image set' do
+      let!(:cv_request) { Fabricate(:cv_request, image_set: image_set) }
+      it {
+        expect(subject).to error_invalid_resource_with(
+                             {
+                               image_set: ['has already been taken']
+                             })
+      }
+    end
+
+    describe 'not found' do
+      let(:params) {
+        {
+          image_set_id: 'bad id'
+        }
+      }
+
+      it { expect(subject).to error_not_found_with('image set not found') }
     end
   end
 end
