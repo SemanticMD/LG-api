@@ -8,4 +8,6 @@ class CvResult < ActiveRecord::Base
 
   has_one :image_set, through: :image
   has_one :lion, through: :image_set
+
+  scope :by_probability, ->{ order('match_probability DESC') }
 end

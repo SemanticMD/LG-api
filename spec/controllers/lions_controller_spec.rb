@@ -54,5 +54,31 @@ RSpec.describe LionsController, :type => :controller do
     it_behaves_like "an authenticated controller"
     it { expect { subject }.to change { Lion.count }.by(1) }
     it { expect(subject).to serialize_to(LionSerializer, Lion.all.last) }
+
+    describe 'bad image set id' do
+      let(:params) { { lion: {name: 'isaac'} } }
+      it {
+        expect(subject).to error_invalid_resource_with(
+                             { primary_image_set: ["for lion creation not found"] })
+      }
+    end
+
+    describe 'bad image set' do
+      before { image_set.update(lion: Fabricate(:lion)) }
+
+      it {
+        expect(subject).to error_invalid_resource_with(
+                             { primary_image_set: ["already associated with another lion"] })
+      }
+    end
+
+    describe 'missing name' do
+      let(:params) { { lion: {primary_image_set_id: image_set.id} } }
+      it {
+        expect(subject).to error_invalid_resource_with(
+                             { name: ["can't be blank"] })
+      }
+    end
+
   end
 end

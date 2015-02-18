@@ -10,7 +10,8 @@ class ImageSetSerializer < BaseSerializer
     property :has_cv_results, !item.cv_results.empty?
     property :cv_request_id, item.cv_request.id if item.cv_request
 
-    entities :images, item.images, ImageSerializer
+    entities :images, item.viewable_images(context[:current_user]), ImageSerializer
+
     entity :uploading_organization, item.uploading_organization, OrganizationSerializer
 
     # Avoid infinite circular embeds

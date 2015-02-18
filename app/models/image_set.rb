@@ -18,11 +18,29 @@ class ImageSet < ActiveRecord::Base
 
   accepts_nested_attributes_for :images
 
+  validates_associated :images
   validate :main_image_in_image_set
+  validate :main_image_is_public
+
+  # make sure lion_id is nil or pointing to a real lion
+  validates :lion, presence: true, if: "lion_id.present?"
 
   before_destroy :hide_images
 
+  def viewable_images(user)
+    if owner? user
+      images
+    else
+      images.is_public
+    end
+  end
+
   private
+
+  def owner?(user)
+    user.present? &&
+      (user == uploading_user || user.organization == organization)
+  end
 
   def hide_images
     images.each { |image| image.hide }
@@ -31,6 +49,12 @@ class ImageSet < ActiveRecord::Base
   def main_image_in_image_set
     if main_image && !images.include?(main_image)
       errors.add(:main_image, 'must be included in images')
+    end
+  end
+
+  def main_image_is_public
+    if main_image && !main_image.is_public
+      errors.add(:main_image, 'must be publicly accessible')
     end
   end
 end

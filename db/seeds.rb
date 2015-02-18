@@ -14,9 +14,9 @@ image_set_1 = ImageSet.create(
     latitude: -2.6527,
     longitude: 37.26058,
     images_attributes: [
-      {url: lion_img_url_1, image_type: 'cv'},
-      {url: lion_img_url_2, image_type: 'whisker'},
-      {url: lion_img_url_3, image_type: 'markings'}
+      {url: lion_img_url_1, is_public: true, image_type: 'cv'},
+      {url: lion_img_url_2, is_public: true, image_type: 'whisker'},
+      {url: lion_img_url_3, is_public: true, image_type: 'markings'}
     ]
   }
 )
@@ -40,9 +40,9 @@ image_set_2 = ImageSet.create(
     latitude: -2.6527,
     longitude: 37.26058,
     images_attributes: [
-      {url: lion_img_url_1, image_type: 'cv'},
-      {url: lion_img_url_2, image_type: 'whisker'},
-      {url: lion_img_url_3, image_type: 'markings'}
+      {url: lion_img_url_1, is_public: true, image_type: 'cv'},
+      {url: lion_img_url_2, is_public: true, image_type: 'whisker'},
+      {url: lion_img_url_3, is_public: true, image_type: 'markings'}
     ]
   }
 )
@@ -63,9 +63,9 @@ image_set_3 = ImageSet.create(
     latitude: -2.6527,
     longitude: 37.26058,
     images_attributes: [
-      {url: lion_img_url_1, image_type: 'cv'},
-      {url: lion_img_url_2, image_type: 'whisker'},
-      {url: lion_img_url_3, image_type: 'markings'}
+      {url: lion_img_url_1, is_public: true, image_type: 'cv'},
+      {url: lion_img_url_2, is_public: true, image_type: 'whisker'},
+      {url: lion_img_url_3, is_public: true, image_type: 'markings'}
     ]
   }
 )
@@ -82,9 +82,9 @@ image_set_cv = ImageSet.create(
     latitude: -2.6527,
     longitude: 37.26058,
     images_attributes: [
-      {url: lion_img_url_1, image_type: 'cv'},
-      {url: lion_img_url_2, image_type: 'whisker'},
-      {url: lion_img_url_3, image_type: 'markings'}
+      {url: lion_img_url_1, is_public: true, image_type: 'cv'},
+      {url: lion_img_url_2, is_public: true, image_type: 'whisker'},
+      {url: lion_img_url_3, is_public: true, image_type: 'markings'}
     ]
   }
 )

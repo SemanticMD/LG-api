@@ -4,7 +4,7 @@ class ImageSetsController < ApiController
 
   def index
     @image_sets = search_results
-    render json: ImageSetsSerializer.new(@image_sets)
+    render json: ImageSetsSerializer.new(@image_sets, current_user: current_user)
   end
 
   def create
@@ -14,10 +14,20 @@ class ImageSetsController < ApiController
   end
 
   def update
-    @image_set.update(expanded_params)
-    @image_set.save
+    _params = expanded_params
 
-    render_image_set
+    old_lion = @image_set.lion
+    new_lion_id = _params[:lion_id]
+    if old_lion && new_lion_id &&old_lion.id.to_s != new_lion_id.to_s
+      return error_invalid_resource(
+               lion: ["#{@image_set.id} already associated with a different lion #{old_lion.name}"]
+             )
+    else
+      @image_set.update(expanded_params)
+      @image_set.save
+
+      render_image_set
+    end
   end
 
   def show
@@ -56,11 +66,15 @@ class ImageSetsController < ApiController
   end
 
   def render_image_set
-    render json: ImageSetSerializer.new(@image_set)
+    if @image_set.valid?
+      render json: ImageSetSerializer.new(@image_set, current_user: current_user)
+    else
+      error_invalid_resource(@image_set.errors)
+    end
   end
 
   def expanded_params
-    @uploading_user = User.find_by_id(image_set_params[:user_id])
+    @uploading_user = current_user
     @uploading_organization = @uploading_user.organization
     _params = image_set_params.except(:user_id)
       .merge({:uploading_user => @uploading_user,

@@ -19,6 +19,24 @@ RSpec.describe ImageSet, :type => :model do
       subject { Fabricate :image_set_with_images }
       it { should be_valid }
     end
+
+    describe 'main image is public' do
+      subject { Fabricate :image_set_with_images }
+      before { subject.main_image.update(is_public: false) }
+      it { should_not be_valid }
+    end
+
+    describe 'with lion' do
+      let(:lion) { Fabricate :lion }
+      subject { Fabricate(:image_set, lion: lion) }
+      it { should be_valid }
+      it { expect(subject.lion).to eq lion }
+    end
+
+    describe 'bad lion id' do
+      subject { Fabricate.build(:image_set, lion_id: 'bad id') }
+      it { should_not be_valid }
+    end
   end
 
   describe 'fetching cv_results for image_set' do
@@ -50,5 +68,46 @@ RSpec.describe ImageSet, :type => :model do
 
       image_set.destroy
     }
+  end
+
+  describe 'viewable_images' do
+    let!(:image_set) { Fabricate :image_set_with_images }
+
+    it {
+      expect(image_set.images.count).to equal 5
+      expect(image_set.images.is_public.count).to equal 1
+    }
+
+    it {
+      expect(image_set.viewable_images(nil)).to eq image_set.images.is_public
+    }
+
+    it {
+      expect(image_set.viewable_images(nil)).to eq image_set.images.is_public
+    }
+
+    context 'with user' do
+      let(:user) { Fabricate :user }
+
+      it {
+        expect(image_set.viewable_images(user)).to eq image_set.images.is_public
+      }
+    end
+
+    context 'with owner user' do
+      let(:user) { image_set.uploading_user }
+
+      it {
+        expect(image_set.viewable_images(user)).to eq image_set.images
+      }
+    end
+
+    context 'with owner user' do
+      let(:user) { Fabricate(:user, organization: image_set.organization) }
+
+      it {
+        expect(image_set.viewable_images(user)).to eq image_set.images
+      }
+    end
   end
 end
