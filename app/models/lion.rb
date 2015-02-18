@@ -27,7 +27,9 @@ class Lion < ActiveRecord::Base
     age_params = search_params.extract!(:dob_range_start, :dob_range_end)
 
     unless age_params.empty?
-      dob_hash = { date_of_birth: (age_params[:dob_range_start]..age_params[:dob_range_end]) }
+      dob_start = DateTime.parse(age_params[:dob_range_start])
+      dob_end = DateTime.parse(age_params[:dob_range_end])
+      dob_hash = { date_of_birth: (dob_start..dob_end) }
       search_params.merge!(dob_hash)
     end
 
