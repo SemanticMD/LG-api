@@ -93,7 +93,7 @@ image_set_cv = ImageSet.create(
   }
 )
 
-image_set_cv.main_image = image_set_cv.images.first
+image_set_cv.main_image = image_set_cv.images.where(image_type: 'markings').first
 image_set_cv.save
 
 cv_request = CvRequest.create(
