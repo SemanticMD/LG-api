@@ -36,6 +36,14 @@ class Lion < ActiveRecord::Base
     Lion.where(search_params)
   end
 
+  scope :by_gender, ->(gender) {
+    if gender
+      Lion.joins(:primary_image_set).where(image_sets: {gender: gender})
+    else
+      Lion.all
+    end
+  }
+
   private
 
   def primary_image_set_in_image_sets

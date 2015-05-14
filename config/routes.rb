@@ -1,8 +1,18 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   devise_for :users, controllers: { sessions: 'sessions' }
 
   ActiveAdmin.routes(self)
+
+  admin_constraint = lambda { |request|
+    request.env["warden"].authenticate? and request.env['warden'].user.class == AdminUser
+  }
+
+  constraints admin_constraint do
+    mount Sidekiq::Web => '/admin/jobs'
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

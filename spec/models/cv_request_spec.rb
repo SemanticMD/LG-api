@@ -22,5 +22,14 @@ RSpec.describe CvRequest, :type => :model do
       let(:cv_request) { Fabricate.build(:cv_request, uploading_organization: nil) }
       it { should_not be_valid }
     end
-end
+  end
+
+  describe 'scheduling async worker' do
+    let(:cv_request) { Fabricate.build(:cv_request) }
+    subject { cv_request.save }
+
+    it {
+      expect { subject }.to change { CvRequestWorker.jobs.size }.by(1)
+    }
+  end
 end

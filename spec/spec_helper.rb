@@ -38,6 +38,10 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
+  config.before(:each) do
+    Sidekiq::Worker.clear_all
+  end
+
   config.profile_examples = 10
 
   if config.files_to_run.one?
@@ -48,6 +52,9 @@ RSpec.configure do |config|
   end
 
   config.order = :random
+
+  require 'sidekiq/testing'
+  Sidekiq::Testing.fake!
 
 # The settings below are suggested to provide a good initial experience
 # with RSpec, but feel free to customize to your heart's content.

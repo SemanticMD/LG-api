@@ -10,13 +10,7 @@ class CvRequestsController < ApiController
   end
 
   def create
-    @cv_request = CvRequest.create(
-      {
-        image_set: @image_set,
-        uploading_organization: @image_set.organization,
-        status: 'created'
-      }
-    )
+    @cv_request = CvRequest.create_for_image_set(@image_set)
 
     render_cv_request
   end

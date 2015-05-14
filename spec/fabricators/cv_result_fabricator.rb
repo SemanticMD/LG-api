@@ -1,5 +1,5 @@
 Fabricator(:cv_result) do
   cv_request
-  image
+  lion
   match_probability 0.5
 end
