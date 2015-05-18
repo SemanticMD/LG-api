@@ -18,17 +18,34 @@ RSpec.describe Lion, :type => :model do
 
     it { expect(lion).to be_valid }
     it { expect(lion.name).to eq name }
-    it { expect(lion.date_of_birth).to eq image_set.date_of_birth }
-    it { expect(lion.gender).to eq image_set.gender }
     it { expect(lion.organization).to eq image_set.organization }
     it { expect(image_set.reload.lion).to eq lion }
   end
 
-  describe 'set DOB' do
-    let(:birthdate) { 26.years.ago }
-    let(:lion) { Fabricate :lion, date_of_birth: birthdate }
+  describe 'search' do
+    subject { Lion.search(params) }
 
-    it { expect(lion).to be_valid }
-    it { expect(lion.date_of_birth).to eq birthdate }
+    context 'by name' do
+      let!(:lion1) { Fabricate :lion }
+      let!(:lion2) { Fabricate :lion }
+      let(:name) { lion1.name }
+
+      let(:params) { {name: name} }
+
+      it {
+        expect(subject).to eq([lion1])
+      }
+    end
+
+    context 'by gender' do
+      let!(:male_lion) { Fabricate :lion }
+      let!(:female_lion) { Fabricate :female_lion }
+
+      let(:params) { {gender: 'female'} }
+
+      it {
+        expect(subject).to eq([female_lion])
+      }
+    end
   end
 end

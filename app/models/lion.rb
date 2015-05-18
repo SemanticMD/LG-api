@@ -8,12 +8,14 @@ class Lion < ActiveRecord::Base
 
   validate :primary_image_set_in_image_sets
 
+  # Search Params on lions table
+  # All other search params are on primary image set
+  LION_SEARCH_PARAMS = [:name, :organization_id]
+
   def self.create_from_image_set(image_set, name)
     lion = Lion.new(
       organization: image_set.organization,
-      name: name,
-      gender: image_set.gender,
-      date_of_birth: image_set.date_of_birth
+      name: name
     )
 
     lion.image_sets << image_set
@@ -33,12 +35,21 @@ class Lion < ActiveRecord::Base
       search_params.merge!(dob_hash)
     end
 
-    Lion.where(search_params)
+    params = {}
+    LION_SEARCH_PARAMS.each do |key|
+      params[key] = search_params.delete key if search_params.has_key? key
+    end
+
+    unless search_params.empty?
+      params[:image_sets] = search_params
+    end
+
+    Lion.joins(:primary_image_set).where(params)
   end
 
   scope :by_gender, ->(gender) {
     if gender
-      Lion.joins(:primary_image_set).where(image_sets: {gender: gender})
+      Lion.joins(:primary_image_set).where(image_sets: {gender: [gender, nil]})
     else
       Lion.all
     end
