@@ -12,6 +12,7 @@ class ImageSetSerializer < BaseSerializer
     property :has_cv_results, !item.cv_results.empty?
     property :cv_request_id, item.cv_request.id if item.cv_request
     property :has_cv_request, item.cv_request.present?
+    property :tags, item.tags if item.tags.present?
 
     entities :images, item.viewable_images(context[:current_user]), ImageSerializer
 

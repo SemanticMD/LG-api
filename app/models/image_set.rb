@@ -1,3 +1,5 @@
+require 'lg/image_set_meta_data'
+
 class ImageSet < ActiveRecord::Base
   belongs_to :lion
 
@@ -15,6 +17,43 @@ class ImageSet < ActiveRecord::Base
 
   has_one :cv_request
   has_many :cv_results, through: :cv_request
+
+  validate :valid_tags
+
+  scope :for_tags, ->(tags) {
+    unless tags && tags.empty?
+      where("tags @> ARRAY[?]::varchar[]", tags)
+    else
+      all
+    end
+  }
+
+  def self.search(params)
+    tags = params.delete(:tags)
+
+    query = ImageSet.where(params)
+
+    if params.has_key?(:lions)
+      query = query.joins(:lion)
+    end
+
+
+    if tags && !tags.empty?
+      query = query.for_tags(tags)
+    end
+
+    query
+  end
+
+  def valid_tags
+    if self.tags
+      self.tags.each do |prop|
+        unless LG::ImageSetMetaData::OPTIONS.include? prop
+          errors.add(:tags, "invalid tag #{prop}")
+        end
+      end
+    end
+  end
 
   accepts_nested_attributes_for :images
 
