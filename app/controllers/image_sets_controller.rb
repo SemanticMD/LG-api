@@ -24,6 +24,11 @@ class ImageSetsController < ApiController
              )
     else
       @image_set.update(_params)
+
+      if !params[:image_set][:tags]
+        @image_set.tags = nil
+      end
+
       @image_set.save
 
       render_image_set
@@ -43,15 +48,11 @@ class ImageSetsController < ApiController
   private
 
   def search_results
-    if search_params.has_key?(:lions)
-      ImageSet.joins(:lion).where(search_params)
-    else
-      ImageSet.where(search_params)
-    end
+    ImageSet.search search_params
   end
 
   def search_params
-    _params = params.permit(:age, :gender, :name, :organization_id)
+    _params = params.permit(:age, :gender, :name, :organization_id, tags: [])
 
     if _params[:organization_id]
       _params[:owner_organization_id] = _params.delete(:organization_id)
@@ -108,6 +109,7 @@ class ImageSetsController < ApiController
           :latitude,
           :longitude,
           :main_image_id,
+          tags: [],
           images:     [:id, :url, :image_type, :is_public])
   end
 end

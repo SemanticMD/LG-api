@@ -66,8 +66,6 @@ class LionsController < ApiController
     params.require(:lion).permit(
       :primary_image_set_id,
       :name,
-      :date_of_birth,
-      :gender,
       :organization_id
     )
   end

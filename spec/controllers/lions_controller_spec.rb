@@ -6,7 +6,7 @@ RSpec.describe LionsController, :type => :controller do
   subject { request.call }
 
   describe '#show' do
-    let(:lion) { Fabricate :lion, date_of_birth: 3.years.ago }
+    let(:lion) { Fabricate :lion }
     let(:request) { ->{ get :show, id: lion.id } }
 
     it_behaves_like "an authenticated controller"
@@ -14,8 +14,16 @@ RSpec.describe LionsController, :type => :controller do
   end
 
   describe '#index' do
-    let(:lion1) { Fabricate(:lion, date_of_birth: 24.years.ago, gender:'male')}
-    let(:lion2) { Fabricate(:lion, date_of_birth: 29.years.ago, gender:'female')}
+    let(:lion1) { Fabricate(:male_lion).tap { |l|
+                    l.primary_image_set.update(date_of_birth: 24.years.ago)
+                  }
+    }
+
+    let(:lion2) { Fabricate(:female_lion).tap { |l|
+                    l.primary_image_set.update(date_of_birth: 29.years.ago)
+                  }
+    }
+
     let!(:lions) { [lion1, lion2] }
     let(:request) { ->{ get :index, params } }
 

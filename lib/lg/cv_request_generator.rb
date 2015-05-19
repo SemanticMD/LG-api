@@ -56,7 +56,11 @@ module LG
     end
 
     def age
-      Time.now.year - @cv_request.image_set.date_of_birth.year
+      if @cv_request.image_set.date_of_birth
+        Time.now.year - @cv_request.image_set.date_of_birth.year
+      else
+        0
+      end
     end
 
     def request_data

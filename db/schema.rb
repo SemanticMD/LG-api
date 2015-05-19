@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150515184417) do
+ActiveRecord::Schema.define(version: 20150519001931) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -88,7 +88,10 @@ ActiveRecord::Schema.define(version: 20150515184417) do
     t.datetime "created_at",                                                         null: false
     t.datetime "updated_at",                                                         null: false
     t.datetime "date_of_birth"
+    t.string   "tags",                                                                            array: true
   end
+
+  add_index "image_sets", ["tags"], name: "index_image_sets_on_tags", using: :gin
 
   create_table "images", force: :cascade do |t|
     t.string   "image_type"
@@ -105,11 +108,9 @@ ActiveRecord::Schema.define(version: 20150515184417) do
   create_table "lions", force: :cascade do |t|
     t.string   "name",                 null: false
     t.integer  "organization_id"
-    t.string   "gender"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
     t.integer  "primary_image_set_id"
-    t.datetime "date_of_birth"
   end
 
   add_index "lions", ["name"], name: "index_lions_on_name", unique: true, using: :btree

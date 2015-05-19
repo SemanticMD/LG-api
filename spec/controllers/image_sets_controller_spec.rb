@@ -54,6 +54,13 @@ RSpec.describe ImageSetsController, :type => :controller do
       it { expect(subject).to serialize_to(ImageSetsSerializer, [image_set_3]) }
     end
 
+    context 'search by tag' do
+      let(:tag) { LG::ImageSetMetaData::OPTIONS[0] }
+      let(:params) { { tags: [tag] } }
+      let!(:tagged_image_set) { Fabricate :image_set, tags: [tag] }
+      it { expect(subject).to serialize_to(ImageSetsSerializer, [tagged_image_set]) }
+    end
+
   end
 
   describe '#create' do
@@ -115,6 +122,25 @@ RSpec.describe ImageSetsController, :type => :controller do
         expect { subject }.to \
           change { image_set.reload.organization }.to(new_organization)
       }
+    end
+
+    describe 'tags' do
+      let(:tag) { LG::ImageSetMetaData::OPTIONS[0] }
+      let(:params) { { tags: [tag] } }
+
+      it {
+        expect {subject}.to change {image_set.reload.tags}.from(nil).to([tag])
+      }
+
+      describe 'removing tag' do
+        before { image_set.update(tags: [tag]) }
+        let(:params) { { tags: [] } }
+
+        it {
+          expect {subject}.to change {image_set.reload.tags}.from([tag]).to([])
+        }
+
+      end
     end
 
     describe 'not found' do

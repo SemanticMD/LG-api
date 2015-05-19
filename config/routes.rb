@@ -28,6 +28,8 @@ Rails.application.routes.draw do
   resources :images, only:[:create, :show, :update, :destroy]
   resources :lions, only:[:show, :index, :create, :update, :destroy]
   resources :organizations, only: [:index]
+  resources :search_options, only: [:index]
+
   resources :uploads, only:[:create]
   resources :users, only:[:show]
 

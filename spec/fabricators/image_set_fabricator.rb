@@ -3,6 +3,13 @@ Fabricator(:image_set) do
   uploading_organization { Fabricate :organization }
   uploading_user { Fabricate :user }
   date_of_birth 30.years.ago
+end
+
+Fabricator(:female_image_set, from: :image_set) do
+  gender 'female'
+end
+
+Fabricator(:male_image_set, from: :image_set) do
   gender 'male'
 end
 

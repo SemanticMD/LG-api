@@ -15,19 +15,21 @@ image_set_1 = ImageSet.create(
     organization: lg,
     latitude: -2.6527,
     longitude: 37.26058,
-    date_of_birth: 14.years.ago,
+    date_of_birth: 30.years.ago,
+    gender: 'male',
     images_attributes: [
       {url: lion_img_url_1, is_public: true, image_type: 'cv'},
       {url: lion_img_url_2, is_public: true, image_type: 'whisker'},
       {url: lion_img_url_3, is_public: true, image_type: 'markings'}
-    ]
+    ],
+    tags: ['EAR_MARKING_LEFT', 'EYE_DAMAGE_LEFT', 'MOUTH_MARKING_LEFT', 'NOSE_COLOUR_BLACK', 'TAIL_MARKING_MISSING_TUFT', 'TEETH_BROKEN_CANINE_LEFT', 'TEETH_BROKEN_INCISOR_LEFT', 'SCARS_BODY_LEFT']
   }
 )
 
 image_set_1.main_image = image_set_1.images.first
 image_set_1.save
 
-lion_1 = Lion.create({name: 'Simba', gender: 'male', date_of_birth: 14.years.ago, organization: lg })
+lion_1 = Lion.create({name: 'Simba', organization: lg })
 lion_1.image_sets << image_set_1
 lion_1.primary_image_set = image_set_1
 lion_1.save
@@ -42,7 +44,8 @@ image_set_2 = ImageSet.create(
     organization: org201,
     latitude: -2.6527,
     longitude: 37.26058,
-    date_of_birth: 14.years.ago,
+    date_of_birth: 10.years.ago,
+    gender: 'female',
     images_attributes: [
       {url: lion_img_url_1, is_public: true, image_type: 'cv'},
       {url: lion_img_url_2, is_public: true, image_type: 'whisker'},
@@ -54,7 +57,7 @@ image_set_2 = ImageSet.create(
 image_set_2.main_image = image_set_2.images.last
 image_set_2.save
 
-lion_2 = Lion.create({name: 'Lauren', gender: 'female', date_of_birth: 10.years.ago, organization: org201 })
+lion_2 = Lion.create({name: 'Lauren', organization: org201 })
 lion_2.image_sets << image_set_2
 lion_2.primary_image_set = image_set_2
 lion_2.save
@@ -107,11 +110,11 @@ cv_request = CvRequest.create(
 CvResult.create(
   cv_request: cv_request,
   match_probability: 0.8,
-  image: lion_1.primary_image_set.main_image
+  lion: lion_1
 )
 
 CvResult.create(
   cv_request: cv_request,
   match_probability: 0.7,
-  image: lion_2.primary_image_set.main_image
+  lion: lion_2
 )

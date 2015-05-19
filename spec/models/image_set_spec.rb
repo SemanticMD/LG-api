@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'lg/image_set_meta_data'
 
 RSpec.describe ImageSet, :type => :model do
   subject { Fabricate :image_set }
@@ -36,6 +37,45 @@ RSpec.describe ImageSet, :type => :model do
     describe 'bad lion id' do
       subject { Fabricate.build(:image_set, lion_id: 'bad id') }
       it { should_not be_valid }
+    end
+
+    describe 'tags' do
+      let(:tags) { LG::ImageSetMetaData::OPTIONS[0..1] }
+      subject { Fabricate.create(:image_set, tags: tags) }
+      it { should be_valid }
+    end
+
+    describe 'invalid tag' do
+      let(:tags) { ['--not a tag'] }
+      subject { Fabricate.build(:image_set, tags: tags) }
+      it { should_not be_valid }
+    end
+  end
+
+  describe 'for_tags scope' do
+    let!(:no_tag_image_set) { Fabricate :image_set }
+
+    let(:tag_1) { LG::ImageSetMetaData::OPTIONS[0] }
+    let(:tag_2) { LG::ImageSetMetaData::OPTIONS[1] }
+    let!(:tag_1_image_set) { Fabricate :image_set, tags: [tag_1] }
+    let!(:tag_2_image_set) { Fabricate :image_set, tags: [tag_2] }
+
+    context 'no filter' do
+      subject { ImageSet.for_tags [] }
+      it { expect(subject).to include(no_tag_image_set) }
+      it { expect(subject).to include(tag_1_image_set) }
+      it { expect(subject).to include(tag_2_image_set) }
+    end
+
+    context 'by tag' do
+      subject { ImageSet.for_tags [tag_1] }
+      it { expect(subject).to eq [tag_1_image_set] }
+    end
+
+    context 'by 2 tags' do
+      let(:both_image_set) { Fabricate :image_set, tags: [tag_1, tag_2] }
+      subject { ImageSet.for_tags [tag_1, tag_2] }
+      it { expect(subject).to eq [both_image_set] }
     end
   end
 
