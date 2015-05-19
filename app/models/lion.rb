@@ -8,6 +8,8 @@ class Lion < ActiveRecord::Base
 
   validate :primary_image_set_in_image_sets
 
+  before_destroy :unverify_image_sets, prepend: true
+
   # Search Params on lions table
   # All other search params are on primary image set
   LION_SEARCH_PARAMS = [:name, :organization_id]
@@ -56,6 +58,12 @@ class Lion < ActiveRecord::Base
   }
 
   private
+
+  def unverify_image_sets
+    self.image_sets.each do |image_set|
+      image_set.update(is_verified: false)
+    end
+  end
 
   def primary_image_set_in_image_sets
     if primary_image_set && !image_sets.include?(primary_image_set)

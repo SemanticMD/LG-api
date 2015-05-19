@@ -127,10 +127,15 @@ RSpec.describe LionsController, :type => :controller do
   describe '#destroy' do
     let(:user) { resource }
     let!(:lion) { Fabricate(:lion, organization: user.organization) }
+    let(:image_set) { lion.primary_image_set }
     let(:request) { ->{ delete :destroy, id: lion.id } }
+
+    before { image_set.update(is_verified: true) }
 
     it_behaves_like "an authenticated controller"
     it { expect { subject }.to change { Lion.count }.by(-1) }
+    it { expect { subject }.to change {image_set.reload.lion_id}.to(nil) }
+    it { expect { subject }.to change {image_set.reload.is_verified}.from(true).to(false) }
 
     describe 'not found' do
       let(:request) { ->{ delete :destroy, id: 'bad id' } }
