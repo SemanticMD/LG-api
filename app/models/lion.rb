@@ -4,7 +4,7 @@ class Lion < ActiveRecord::Base
   has_many :image_sets, dependent: :nullify
   belongs_to :primary_image_set, class_name: 'ImageSet'
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: true
 
   validate :primary_image_set_in_image_sets
 

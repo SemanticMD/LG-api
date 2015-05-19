@@ -1,0 +1,3 @@
+export S3_BUCKET="lg-201-created-development"
+export AWS_ACCESS_KEY_ID="AKIAJBXEUHXTTBKTQQTA"
+export AWS_SECRET_ACCESS_KEY="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"
