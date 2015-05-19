@@ -10,8 +10,10 @@ LG API (Rails)
 * Rubygems
 * Bundler
 * Postgres DB - `brew install git postgres` on Mac
+* Redis
 
 ## Setup
  * `bundle install`
  * `bundle exec rake db:setup`
  * `bundle exec rails server`
+ * `bundle exec sidekiq` in a separate terminal to run sidekiq which will run async jobs for communicating with CV Server

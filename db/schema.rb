@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150212134953) do
+ActiveRecord::Schema.define(version: 20150515184417) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(version: 20150212134953) do
     t.string   "status"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
+    t.string   "server_uuid"
   end
 
   add_index "cv_requests", ["image_set_id"], name: "index_cv_requests_on_image_set_id", using: :btree
@@ -62,14 +63,14 @@ ActiveRecord::Schema.define(version: 20150212134953) do
 
   create_table "cv_results", force: :cascade do |t|
     t.integer  "cv_request_id",     null: false
-    t.integer  "image_id",          null: false
     t.float    "match_probability", null: false
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
+    t.integer  "lion_id"
   end
 
   add_index "cv_results", ["cv_request_id"], name: "index_cv_results_on_cv_request_id", using: :btree
-  add_index "cv_results", ["image_id"], name: "index_cv_results_on_image_id", using: :btree
+  add_index "cv_results", ["lion_id"], name: "index_cv_results_on_lion_id", using: :btree
 
   create_table "image_sets", force: :cascade do |t|
     t.integer  "lion_id"

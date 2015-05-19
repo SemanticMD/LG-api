@@ -28,10 +28,15 @@ module LionGuardiansApi
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    config.autoload_paths += %W(#{config.root}/lib)
+    config.autoload_paths +=
+      %W(#{config.root}/lib
+         #{Rails.root}/app/workers
+      )
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+
+    config.cache_store = :redis_store, "#{ENV['REDISTOGO_URL']}/0", { expires_in: 90.minutes }
 
     config.middleware.insert 0, Rack::Cors do
       allow do

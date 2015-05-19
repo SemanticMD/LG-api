@@ -4,7 +4,9 @@ lion_img_url_3 = "https://lg-201-created-development.s3.amazonaws.com/uploads%2F
 
 lg = Organization.create(name: 'Lion Guardians')
 org201 = Organization.create(name: '201 Created')
-user = User.create(email: 'justin@lg.org', password: 'password', organization: lg)
+admin_user = AdminUser.create(email: 'justin@lg.org', password: 'password')
+user = User.create(email: admin_user.email, password: admin_user.password, organization: lg)
+
 
 image_set_1 = ImageSet.create(
   {

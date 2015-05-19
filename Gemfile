@@ -35,6 +35,11 @@ gem 'rack-cors'
 
 gem 'oat'
 
+gem 'redis-rails'
+gem 'sidekiq'
+gem 'sinatra', :require => nil # for sidekiq
+gem 'rest-client'
+
 group :development, :test do
   gem 'rspec-rails'
 
