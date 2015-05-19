@@ -9,7 +9,7 @@ class LionSerializer < BaseSerializer
     if context[:embedded]
       property :image_set_ids, item.image_sets.map(&:id)
     else
-      entities :image_sets, item.image_sets, ImageSetSerializer, embedded: true
+      entities :image_sets, item.all_image_sets, ImageSetSerializer, embedded: true
     end
   end
 end

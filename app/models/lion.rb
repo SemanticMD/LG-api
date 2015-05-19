@@ -57,6 +57,11 @@ class Lion < ActiveRecord::Base
     end
   }
 
+  def all_image_sets
+    all_image_sets = self.image_sets + [self.primary_image_set]
+    all_image_sets.compact.uniq
+  end
+
   private
 
   def unverify_image_sets
