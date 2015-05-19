@@ -2,10 +2,10 @@ class CvResultsWorker
   include Sidekiq::Worker
   require 'lg/cv_results_reader'
 
-  DELAY_IN_SECONDS = 10
+  TIMEOUT_IN_SECONDS = 3
 
   def self.schedule(cv_request_id)
-    self.perform_in(DELAY_IN_SECONDS, cv_request_id)
+    self.perform_in(TIMEOUT_IN_SECONDS, cv_request_id)
   end
 
   def perform(cv_request_id)
