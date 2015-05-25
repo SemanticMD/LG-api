@@ -109,6 +109,7 @@ class ImageSetsController < ApiController
           :latitude,
           :longitude,
           :main_image_id,
+          :is_verified,
           tags: [],
           images:     [:id, :url, :image_type, :is_public])
   end
