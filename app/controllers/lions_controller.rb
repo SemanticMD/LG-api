@@ -1,6 +1,7 @@
 class LionsController < ApiController
   before_filter :require_lion, except: [:create, :index]
   before_filter :require_lion_ownership, only: [:update, :destroy]
+  skip_before_filter :require_authenticated_user!, only: [:index, :show]
 
   def show
     render_lion
