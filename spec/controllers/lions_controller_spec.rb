@@ -1,15 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe LionsController, :type => :controller do
-  let(:resource) { Fabricate(:user) }
-  before { sign_in resource }
   subject { request.call }
 
   describe '#show' do
     let(:lion) { Fabricate :lion, date_of_birth: 3.years.ago }
     let(:request) { ->{ get :show, id: lion.id } }
 
-    it_behaves_like "an authenticated controller"
     it { expect(subject).to serialize_to(LionSerializer, lion) }
   end
 
@@ -21,7 +18,6 @@ RSpec.describe LionsController, :type => :controller do
 
     context 'no params' do
       let(:params) { {} }
-      it_behaves_like "an authenticated controller"
       it { expect(subject).to serialize_to(LionsSerializer, lions) }
     end
 
@@ -39,6 +35,9 @@ RSpec.describe LionsController, :type => :controller do
   end
 
   describe '#create' do
+    let(:resource) { Fabricate(:user) }
+    before { sign_in resource }
+
     let(:name) { 'isaac' }
     let(:image_set) { Fabricate :image_set }
     let(:params) {
@@ -82,6 +81,9 @@ RSpec.describe LionsController, :type => :controller do
   end
 
   describe '#update' do
+    let(:resource) { Fabricate(:user) }
+    before { sign_in resource }
+
     let(:user) { resource }
     let(:lion) { Fabricate(:lion, name: 'Simba', organization: user.organization) }
     let!(:primary_image_set) { lion.primary_image_set }
@@ -117,6 +119,9 @@ RSpec.describe LionsController, :type => :controller do
   end
 
   describe '#destroy' do
+    let(:resource) { Fabricate(:user) }
+    before { sign_in resource }
+
     let(:user) { resource }
     let!(:lion) { Fabricate(:lion, organization: user.organization) }
     let(:request) { ->{ delete :destroy, id: lion.id } }
@@ -134,6 +139,5 @@ RSpec.describe LionsController, :type => :controller do
       let(:request) { ->{ delete :destroy, id: lion.id } }
       it { expect(subject).to error_deny_access }
     end
-
   end
 end
