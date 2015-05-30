@@ -13,9 +13,9 @@ Rails.application.configure do
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
 
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
-  Rails.application.routes.default_url_options = { host: 'localhost', port: 3000 }
-  config.action_controller.default_url_options = { host: 'localhost', port: 3000 }
+  config.action_mailer.default_url_options = { host: 'localhost', port: 5000 }
+  Rails.application.routes.default_url_options = { host: 'localhost', port: 5000 }
+  config.action_controller.default_url_options = { host: 'localhost', port: 5000 }
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false

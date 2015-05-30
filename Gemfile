@@ -40,6 +40,12 @@ gem 'sidekiq'
 gem 'sinatra', :require => nil # for sidekiq
 gem 'rest-client'
 
+gem 'dragonfly'
+# http://markevans.github.io/dragonfly/
+#gem 'dragonfly'
+# https://github.com/markevans/dragonfly-s3_data_store
+gem 'dragonfly-s3_data_store'
+
 group :development, :test do
   gem 'rspec-rails'
 

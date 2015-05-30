@@ -7,6 +7,8 @@ org201 = Organization.create(name: '201 Created')
 admin_user = AdminUser.create(email: 'justin@lg.org', password: 'password')
 user = User.create(email: admin_user.email, password: admin_user.password, organization: lg)
 
+=begin
+
 
 image_set_1 = ImageSet.create(
   {
@@ -118,3 +120,4 @@ CvResult.create(
   match_probability: 0.7,
   lion: lion_2
 )
+=end
