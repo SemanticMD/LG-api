@@ -45,6 +45,9 @@ gem 'dragonfly'
 # https://github.com/markevans/dragonfly-s3_data_store
 gem 'dragonfly-s3_data_store'
 
+# https://devcenter.heroku.com/articles/rollbar#provisioning-the-add-on
+gem 'rollbar', '~> 1.2.7'
+
 group :development, :test do
   gem 'rspec-rails'
 
