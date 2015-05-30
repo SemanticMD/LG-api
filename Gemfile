@@ -29,7 +29,7 @@ gem 'inherited_resources', github: 'josevalim/inherited_resources', branch: 'rai
 # Serve static assets from heroku and other things
 gem 'rails_12factor', group: :production
 
-gem 'aws-sdk'
+gem 'aws-sdk', '~> 2'
 
 gem 'rack-cors'
 
@@ -40,9 +40,8 @@ gem 'sidekiq'
 gem 'sinatra', :require => nil # for sidekiq
 gem 'rest-client'
 
-gem 'dragonfly'
 # http://markevans.github.io/dragonfly/
-#gem 'dragonfly'
+gem 'dragonfly'
 # https://github.com/markevans/dragonfly-s3_data_store
 gem 'dragonfly-s3_data_store'
 
@@ -71,4 +70,7 @@ group :development, :test do
   # Pry Debugger commands https://github.com/nixme/pry-debugger
   gem 'pry-remote'
 
+  # https://github.com/bblimke/webmock
+  # stubs all network activity
+  gem 'webmock'
 end

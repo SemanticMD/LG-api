@@ -31,7 +31,7 @@ class ImageSet < ActiveRecord::Base
   def self.search(params)
     tags = params.delete(:tags)
 
-    query = ImageSet.where(params)
+    query = ImageSet.where(params).order('created_at desc')
 
     if params.has_key?(:lions)
       query = query.joins(:lion)

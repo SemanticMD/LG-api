@@ -43,7 +43,6 @@ class Image < ActiveRecord::Base
   end
 
   def generate_thumbnail
-    puts "GENERATING THUMBNAIL FOR #{self.id}!!!!!!!!!!!!!!!!!!!!"
     ImageThumbnailWorker.perform_async(self.id)
   end
 end

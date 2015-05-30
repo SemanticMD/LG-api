@@ -27,9 +27,9 @@ RSpec.describe ImageSetsController, :type => :controller do
 
     it_behaves_like "an authenticated controller"
 
-    context 'no organization id returns all results' do
+    context 'no organization id returns all results sorted by created_at desc' do
       it { expect(subject).to serialize_to(ImageSetsSerializer,
-                                           [image_set, image_set_2]) }
+                                           [image_set_2, image_set]) }
     end
 
     context 'wrong organization id returns nothing' do

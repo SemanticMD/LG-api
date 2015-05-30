@@ -25,7 +25,7 @@ module LG
           CvResultsWorker.schedule(@cv_request.id)
         end
       else
-        puts 'Error: CvRequestGenerator cannot run with a CvRequest'
+        puts 'Error: CvRequestGenerator cannot run without a CvRequest'
       end
     end
 
