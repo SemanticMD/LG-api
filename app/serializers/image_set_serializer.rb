@@ -4,7 +4,7 @@ class ImageSetSerializer < BaseSerializer
 
     map_properties :id, :is_verified, :latitude, :longitude,
                    :gender, :date_of_birth, :main_image_id,
-                   :uploading_organization_id
+                   :uploading_organization_id, :notes
 
     property :organization_id, item.organization.id
     property :user_id, item.uploading_user_id
@@ -13,6 +13,7 @@ class ImageSetSerializer < BaseSerializer
     property :cv_request_id, item.cv_request.id if item.cv_request
     property :has_cv_request, item.cv_request.present?
     property :tags, item.tags if item.tags.present?
+    property :date_stamp, item.date_stamp.strftime("%Y-%m-%d") if item.date_stamp
 
     entities :images, item.viewable_images(context[:current_user]), ImageSerializer
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150530145435) do
+ActiveRecord::Schema.define(version: 20150531220858) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,6 +89,8 @@ ActiveRecord::Schema.define(version: 20150530145435) do
     t.datetime "updated_at",                                                         null: false
     t.datetime "date_of_birth"
     t.string   "tags",                                                                            array: true
+    t.date     "date_stamp"
+    t.text     "notes"
   end
 
   add_index "image_sets", ["tags"], name: "index_image_sets_on_tags", using: :gin

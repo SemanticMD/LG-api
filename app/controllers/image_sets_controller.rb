@@ -99,18 +99,21 @@ class ImageSetsController < ApiController
   def image_set_params
     params.require(:image_set).
       permit(
-          :id,
-          :url,
-          :lion_id,
-          :date_of_birth,
-          :organization_id,
-          :name,
-          :gender,
-          :latitude,
-          :longitude,
-          :main_image_id,
-          :is_verified,
-          tags: [],
-          images:     [:id, :url, :image_type, :is_public])
+        :id,
+        :url,
+        :lion_id,
+        :date_of_birth,
+        :organization_id,
+        :name,
+        :gender,
+        :latitude,
+        :longitude,
+        :main_image_id,
+        :is_verified,
+        :date_stamp,
+        :notes,
+        tags: [],
+        images: [:id, :url, :image_type, :is_public]
+     )
   end
 end
