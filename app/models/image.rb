@@ -36,6 +36,14 @@ class Image < ActiveRecord::Base
     end
   end
 
+  def full_url
+    if full_image
+      full_image.remote_url
+    else
+      url
+    end
+  end
+
   private
 
   def needs_thumbnail?

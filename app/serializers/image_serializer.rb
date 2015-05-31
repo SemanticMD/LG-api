@@ -5,8 +5,9 @@ class ImageSerializer < BaseSerializer
     map_properties :id,
       :image_type,
       :is_public,
-      :url,
       :thumbnail_url,
       :main_url
+
+    property :url, item.full_url
   end
 end
