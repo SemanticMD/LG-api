@@ -14,7 +14,7 @@ class Image < ActiveRecord::Base
 
   scope :is_public, ->{ where(is_public: true) }
 
-  after_save :generate_thumbnail, if: :needs_thumbnail?
+  after_commit :generate_thumbnail, if: :needs_thumbnail?
 
   def hide
     update(is_deleted: true)
