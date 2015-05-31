@@ -48,10 +48,13 @@ class Image < ActiveRecord::Base
   private
 
   def needs_thumbnail?
-    !self.thumbnail_image
+    ret = !self.thumbnail_image
+    Rails.logger.info "[thumbnail] checking if needs thumbnail for #{id}: #{ret}"
+    ret
   end
 
   def generate_thumbnail
+    Rails.logger.info "[thumbnail] checking if should schedule thumbnail generation"
     Rails.logger.info "[thumbnail] after_save scheduling thumbnail for Image #{self.id}"
     ImageThumbnailWorker.perform_async(self.id)
   end
