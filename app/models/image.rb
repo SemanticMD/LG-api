@@ -15,7 +15,6 @@ class Image < ActiveRecord::Base
   scope :is_public, ->{ where(is_public: true) }
 
   after_save :generate_thumbnail, if: :needs_thumbnail?
-  after_save :skip_thumbnail, unless: :needs_thumbnail?
 
   def hide
     update(is_deleted: true)
@@ -48,18 +47,12 @@ class Image < ActiveRecord::Base
   private
 
   def needs_thumbnail?
-    ret = !self.thumbnail_image
-    Rails.logger.info "[thumbnail] checking if needs thumbnail for #{id}: #{ret}"
-    ret
+    !self.thumbnail_image
   end
 
   def generate_thumbnail
-    Rails.logger.info "[thumbnail] checking if should schedule thumbnail generation"
     Rails.logger.info "[thumbnail] after_save scheduling thumbnail for Image #{self.id}"
     ImageThumbnailWorker.perform_async(self.id)
   end
 
-  def skip_thumbnail
-    Rails.logger.info "[thumbnail] Skipping thumbnail generation for Image #{self.id}"
-  end
 end
