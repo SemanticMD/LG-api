@@ -49,8 +49,6 @@ gem 'dragonfly-s3_data_store'
 gem 'rollbar', '~> 1.2.7'
 
 group :development, :test do
-  gem 'rspec-rails'
-
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
 
@@ -62,16 +60,19 @@ group :development, :test do
 
   gem 'foreman'
 
-  gem 'fabrication'
-  gem 'faker'
-
-  gem 'rspec-its'
-
   # For debugging
   # To set a breakpoint, put "binding.remote_pry" in your ruby code,
   # and run "pry-remote" in any terminal window
   # Pry Debugger commands https://github.com/nixme/pry-debugger
   gem 'pry-remote'
+end
+
+group :test do
+  gem 'rspec-rails'
+  gem 'rspec-its'
+
+  gem 'fabrication'
+  gem 'faker'
 
   # https://github.com/bblimke/webmock
   # stubs all network activity
