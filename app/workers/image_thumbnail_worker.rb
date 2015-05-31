@@ -2,11 +2,21 @@ class ImageThumbnailWorker
   include Sidekiq::Worker
 
   def perform(image_id)
+    Rails.logger.info "[thumbnail] Worker Generating thumbnail for Image #{image_id}"
     @image = Image.find_by_id image_id
-    return if !@image
+    if !@image
+      Rails.logger.info "[thumbnail] Could not find image id #{image_id}"
+      return 
+    end
 
-    return if !@image.url
-    return if @image.thumbnail_image
+    if !@image.url
+      Rails.logger.info "[thumbnail] no url for image id #{image_id}"
+      return
+    end
+    if @image.thumbnail_image
+      Rails.logger.info "[thumbnail] already has thumbnail for image id #{image_id}"
+      return
+    end
 
     @image.full_image_url = @image.url
     @image.save!
