@@ -52,11 +52,11 @@ class Image < ActiveRecord::Base
   end
 
   def generate_thumbnail
-    Rails.logger.info "Generating thumbnail for Image #{self.id}"
+    Rails.logger.info "[thumbnail] after_save scheduling thumbnail for Image #{self.id}"
     ImageThumbnailWorker.perform_async(self.id)
   end
 
   def skip_thumbnail
-    Rails.logger.info "Skipping thumbnail for Image #{self.id}"
+    Rails.logger.info "[thumbnail] Skipping thumbnail generation for Image #{self.id}"
   end
 end

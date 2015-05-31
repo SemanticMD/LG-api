@@ -18,6 +18,7 @@ class ImageThumbnailWorker
       return
     end
 
+    Rails.logger.info "[thumbnail] worker successfully generating thumbnail for #{image_id}"
     @image.full_image_url = @image.url
     @image.save!
 
