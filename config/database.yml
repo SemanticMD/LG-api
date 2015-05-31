@@ -19,7 +19,7 @@ default: &default
   encoding: unicode
   # For details on connection pooling, see rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: 25
+  pool: 5
   timeout: 5000
 
 development:
@@ -84,3 +84,4 @@ production:
   database: lion-guardians-api_production
   username: lion-guardians-api
   password: <%= ENV['LION-GUARDIANS-API_DATABASE_PASSWORD'] %>
+  pool: <%= ENV["DB_POOL"] || ENV['MAX_THREADS'] || 25 %>
