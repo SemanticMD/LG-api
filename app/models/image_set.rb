@@ -13,7 +13,7 @@ class ImageSet < ActiveRecord::Base
                               foreign_key: 'uploading_user_id'
 
   has_many :images,
-    ->{ where(is_deleted: false).order(created_at: :desc) },
+    ->{ where(is_deleted: false).order(created_at: :asc) },
     inverse_of: :image_set
 
   belongs_to :main_image, ->{ where is_deleted: false }, class_name: 'Image'
