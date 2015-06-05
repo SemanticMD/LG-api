@@ -12,7 +12,10 @@ class ImageSet < ActiveRecord::Base
   belongs_to :uploading_user, class_name: 'User',
                               foreign_key: 'uploading_user_id'
 
-  has_many :images, ->{ where is_deleted: false }, inverse_of: :image_set
+  has_many :images,
+    ->{ where(is_deleted: false).order(created_at: :desc) },
+    inverse_of: :image_set
+
   belongs_to :main_image, ->{ where is_deleted: false }, class_name: 'Image'
 
   has_one :cv_request
