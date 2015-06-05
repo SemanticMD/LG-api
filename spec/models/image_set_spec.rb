@@ -79,6 +79,41 @@ RSpec.describe ImageSet, :type => :model do
     end
   end
 
+  describe '#search' do
+    subject { ImageSet.search(search_params) }
+    let(:search_params) { {} }
+
+    context 'for tags' do
+      let(:tag_1) { LG::ImageSetMetaData::OPTIONS[0] }
+      let(:tag_2) { LG::ImageSetMetaData::OPTIONS[1] }
+
+      let!(:no_tag_image_set) { Fabricate :image_set, tags: [] }
+      let!(:tag_1_image_set) { Fabricate :image_set, tags: [tag_1] }
+      let!(:tag_1_and_2_image_set) { Fabricate :image_set, tags: [tag_1, tag_2] }
+
+      context 'no tags' do
+        let(:search_params) { {tags:[]} }
+        it { expect(subject).to include(tag_1_image_set) }
+        it { expect(subject).to include(tag_1_and_2_image_set) }
+        it { expect(subject).to include(no_tag_image_set) }
+      end
+
+      context '1 tag' do
+        let(:search_params) { {tags:[tag_1]} }
+        it { expect(subject).to include(tag_1_image_set) }
+        it { expect(subject).to include(tag_1_and_2_image_set) }
+        it { expect(subject).not_to include(no_tag_image_set) }
+      end
+
+      context '2 tags finds sets with all tags' do
+        let(:search_params) { {tags:[tag_1, tag_2]} }
+        it { expect(subject).not_to include(tag_1_image_set) }
+        it { expect(subject).not_to include(no_tag_image_set) }
+        it { expect(subject).to include(tag_1_and_2_image_set) }
+      end
+    end
+  end
+
   describe 'fetching cv_results for image_set' do
     let(:cv_request) { Fabricate :cv_request }
     let(:image_set) { cv_request.image_set }

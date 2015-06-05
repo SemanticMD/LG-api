@@ -20,6 +20,17 @@ class ImageSet < ActiveRecord::Base
 
   validate :valid_tags
 
+  accepts_nested_attributes_for :images
+
+  validates_associated :images
+  validate :main_image_in_image_set
+  validate :main_image_is_public
+
+  # make sure lion_id is nil or pointing to a real lion
+  validates :lion, presence: true, if: "lion_id.present?"
+
+  before_destroy :hide_images
+
   scope :for_tags, ->(tags) {
     unless tags && tags.empty?
       where("tags @> ARRAY[?]::varchar[]", tags)
@@ -29,14 +40,21 @@ class ImageSet < ActiveRecord::Base
   }
 
   def self.search(params)
-    tags = params.delete(:tags)
+    age_params = params.extract!(:dob_range_start, :dob_range_end)
 
+    unless age_params.empty?
+      dob_start = DateTime.parse(age_params[:dob_range_start])
+      dob_end = DateTime.parse(age_params[:dob_range_end])
+      dob_hash = { date_of_birth: (dob_start..dob_end) }
+      params.merge!(dob_hash)
+    end
+
+    tags = params.delete(:tags)
     query = ImageSet.where(params).order('created_at desc')
 
     if params.has_key?(:lions)
       query = query.joins(:lion)
     end
-
 
     if tags && !tags.empty?
       query = query.for_tags(tags)
@@ -54,17 +72,6 @@ class ImageSet < ActiveRecord::Base
       end
     end
   end
-
-  accepts_nested_attributes_for :images
-
-  validates_associated :images
-  validate :main_image_in_image_set
-  validate :main_image_is_public
-
-  # make sure lion_id is nil or pointing to a real lion
-  validates :lion, presence: true, if: "lion_id.present?"
-
-  before_destroy :hide_images
 
   def viewable_images(user)
     if owner? user

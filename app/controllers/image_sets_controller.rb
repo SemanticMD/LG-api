@@ -52,7 +52,11 @@ class ImageSetsController < ApiController
   end
 
   def search_params
-    _params = params.permit(:age, :gender, :name, :organization_id, tags: [])
+    _params = params.permit(:dob_range_start, :dob_range_end, #age
+                            :gender,
+                            :name,
+                            :organization_id,
+                            tags: [])
 
     if _params[:organization_id]
       _params[:owner_organization_id] = _params.delete(:organization_id)
