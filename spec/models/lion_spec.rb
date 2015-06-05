@@ -32,9 +32,7 @@ RSpec.describe Lion, :type => :model do
 
       let(:params) { {name: name} }
 
-      it {
-        expect(subject).to eq([lion1])
-      }
+      it { expect(subject).to eq([lion1]) }
     end
 
     context 'by gender' do
@@ -43,9 +41,53 @@ RSpec.describe Lion, :type => :model do
 
       let(:params) { {gender: 'female'} }
 
-      it {
-        expect(subject).to eq([female_lion])
+      it { expect(subject).to eq([female_lion]) }
+    end
+
+    context 'by tag' do
+      let(:tag_1) { LG::ImageSetMetaData::OPTIONS[0] }
+      let(:tag_2) { LG::ImageSetMetaData::OPTIONS[1] }
+
+      let(:image_set_no_tags) { Fabricate(:image_set, tags:[]) }
+      let(:image_set_tag_1) { Fabricate(:image_set, tags:[tag_1]) }
+      let(:image_set_tag_1_and_2) { Fabricate(:image_set, tags:[tag_1, tag_2]) }
+
+      let!(:lion_no_tags) {
+        Fabricate(:lion,
+                  image_sets:[image_set_no_tags],
+                  primary_image_set:image_set_no_tags)
       }
+      let!(:lion_1_tag) {
+        Fabricate(:lion,
+                  image_sets:[image_set_tag_1],
+                  primary_image_set:image_set_tag_1)
+      }
+      let!(:lion_2_tags) {
+        Fabricate(:lion,
+                  image_sets:[image_set_tag_1_and_2],
+                  primary_image_set:image_set_tag_1_and_2)
+      }
+
+      context 'no tags' do
+        let(:params) { {tags: []} }
+        it { expect(subject).to include(lion_no_tags) }
+        it { expect(subject).to include(lion_1_tag) }
+        it { expect(subject).to include(lion_2_tags) }
+      end
+
+      context '1 tag' do
+        let(:params) { {tags: [tag_1]} }
+        it { expect(subject).not_to include(lion_no_tags) }
+        it { expect(subject).to include(lion_1_tag) }
+        it { expect(subject).to include(lion_2_tags) }
+      end
+
+      context '2 tags includes image sets with BOTH tags' do
+        let(:params) { {tags: [tag_1, tag_2]} }
+        it { expect(subject).not_to include(lion_no_tags) }
+        it { expect(subject).not_to include(lion_1_tag) }
+        it { expect(subject).to include(lion_2_tags) }
+      end
     end
   end
 end

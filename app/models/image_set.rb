@@ -31,7 +31,6 @@ class ImageSet < ActiveRecord::Base
 
   before_destroy :hide_images
 
-
   scope :for_tags, ->(tags) {
     unless tags && tags.empty?
       where("tags @> ARRAY[?]::varchar[]", tags)
