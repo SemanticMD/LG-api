@@ -14,6 +14,14 @@ class Lion < ActiveRecord::Base
   # All other search params are on primary image set
   LION_SEARCH_PARAMS = [:name, :organization_id]
 
+  scope :by_gender, ->(gender) {
+    if gender
+      Lion.joins(:primary_image_set).where(image_sets: {gender: [gender, nil]})
+    else
+      Lion.all
+    end
+  }
+
   def self.create_from_image_set(image_set, name)
     lion = Lion.new(
       organization: image_set.organization,
@@ -28,34 +36,18 @@ class Lion < ActiveRecord::Base
   end
 
   def self.search(search_params)
-    age_params = search_params.extract!(:dob_range_start, :dob_range_end)
-
-    unless age_params.empty?
-      dob_start = DateTime.parse(age_params[:dob_range_start])
-      dob_end = DateTime.parse(age_params[:dob_range_end])
-      dob_hash = { date_of_birth: (dob_start..dob_end) }
-      search_params.merge!(dob_hash)
-    end
-
-    params = {}
+    lion_params = {}
     LION_SEARCH_PARAMS.each do |key|
-      params[key] = search_params.delete key if search_params.has_key? key
+      lion_params[key] = search_params.delete key if search_params.has_key? key
     end
 
     unless search_params.empty?
-      params[:image_sets] = search_params
+      image_sets = ImageSet.search(search_params)
+      lion_params[:primary_image_set] = image_sets.collect { |img| img.id }
     end
 
-    Lion.joins(:primary_image_set).where(params)
+    Lion.where(lion_params)
   end
-
-  scope :by_gender, ->(gender) {
-    if gender
-      Lion.joins(:primary_image_set).where(image_sets: {gender: [gender, nil]})
-    else
-      Lion.all
-    end
-  }
 
   def all_image_sets
     all_image_sets = self.image_sets + [self.primary_image_set]

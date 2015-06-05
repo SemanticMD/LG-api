@@ -72,6 +72,10 @@ class LionsController < ApiController
   end
 
   def search_params
-    params.permit(:dob_range_start, :dob_range_end, :gender, :organization_id, :name)
+     params.permit(:dob_range_start, :dob_range_end, #age
+                    :gender,
+                    :name,
+                    :organization_id,
+                    tags: [])
   end
 end
