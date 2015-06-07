@@ -132,15 +132,33 @@ RSpec.describe LionsController, :type => :controller do
 
     let(:user) { resource }
     let!(:lion) { Fabricate(:lion, organization: user.organization) }
-    let(:image_set) { lion.primary_image_set }
+    let(:primary_image_set) { lion.primary_image_set }
+    let(:secondary_image_set) { Fabricate(:image_set) }
     let(:request) { ->{ delete :destroy, id: lion.id } }
 
-    before { image_set.update(is_verified: true) }
+    before do
+      # preconditions
+      secondary_image_set.update!(lion_id: lion.id)
+      lion.reload
+      expect(lion.image_sets.count).to eq 2
+      expect(lion.image_sets).to include(primary_image_set)
+      expect(lion.image_sets).to include(secondary_image_set)
+    end
 
     it_behaves_like "an authenticated controller"
     it { expect { subject }.to change { Lion.count }.by(-1) }
-    it { expect { subject }.to change {image_set.reload.lion_id}.to(nil) }
-    it { expect { subject }.to change {image_set.reload.is_verified}.from(true).to(false) }
+
+    it { expect { subject }.to change { ImageSet.count }.by(-1) }
+
+    it 'destroys the primary image set' do
+      primary_image_set_id = primary_image_set.id
+      secondary_image_set_id = secondary_image_set.id
+
+      request.call
+
+      expect(ImageSet.find_by_id(primary_image_set_id)).to be_nil
+      expect(ImageSet.find_by_id(secondary_image_set_id)).to be_present
+    end
 
     describe 'not found' do
       let(:request) { ->{ delete :destroy, id: 'bad id' } }

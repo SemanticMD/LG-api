@@ -1,8 +1,8 @@
 class Lion < ActiveRecord::Base
   belongs_to :organization
 
-  has_one :primary_image_set, class_name: 'ImageSet', dependent: :destroy
   has_many :image_sets, dependent: :nullify
+  belongs_to :primary_image_set, class_name: 'ImageSet', dependent: :destroy
 
   validates :name, presence: true, uniqueness: true
 
