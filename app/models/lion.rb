@@ -9,6 +9,7 @@ class Lion < ActiveRecord::Base
   validate :primary_image_set_in_image_sets
 
   before_destroy :unverify_image_sets, prepend: true
+  before_save :update_primary_image_set, if: :organization_id_changed?
 
   # Search Params on lions table
   # All other search params are on primary image set
@@ -55,6 +56,13 @@ class Lion < ActiveRecord::Base
   end
 
   private
+
+  def update_primary_image_set
+    if primary_image_set
+      primary_image_set.organization = self.organization
+      primary_image_set.save
+    end
+  end
 
   def unverify_image_sets
     self.image_sets.each do |image_set|

@@ -99,21 +99,36 @@ RSpec.describe LionsController, :type => :controller do
 
     let(:request) { -> { put :update, id: lion.id, lion: params } }
 
-    let(:params) {
-      {
-        name: 'Isaac',
-        primary_image_set_id: new_image_set.id }
-    }
+    let(:params) { {
+      name: 'Isaac',
+      primary_image_set_id: new_image_set.id
+    } }
 
     it_behaves_like "an authenticated controller"
 
     it {
-      expect {subject}.to change {lion.reload.primary_image_set}.from(primary_image_set).to(new_image_set)
+      expect {subject}.to change {lion.reload.primary_image_set} \
+                          .from(primary_image_set).to(new_image_set)
     }
 
     it {
       expect {subject}.to change {lion.reload.name}.from('Simba').to('Isaac')
     }
+
+    describe 'changing organization' do
+      let(:new_organization) { Fabricate(:organization) }
+
+      let(:params) { {
+        organization_id: new_organization.id
+      } }
+
+      it 'changes lion organization and primary image set organization' do
+        request.call
+
+        expect(lion.reload.organization).to eq(new_organization)
+        expect(primary_image_set.reload.organization).to eq(new_organization)
+      end
+    end
 
     describe 'user does not own image set' do
       let(:user) { Fabricate :user }
