@@ -27,7 +27,7 @@ Rails.application.routes.draw do
   resources :image_sets, only:[:create, :show, :update, :destroy, :index], path: 'imageSets'
   resources :images, only:[:create, :show, :update, :destroy]
   resources :lions, only:[:show, :index, :create, :update, :destroy]
-  resources :organizations, only: [:index]
+  resources :organizations, only: [:index, :show]
   resources :search_options, only: [:index]
 
   resources :uploads, only:[:create]
