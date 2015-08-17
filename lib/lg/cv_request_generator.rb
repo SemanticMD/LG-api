@@ -4,7 +4,7 @@ module LG
   class CvRequestGenerator
     include Rails.application.routes.url_helpers
 
-    CV_SERVER_URL = 'https://simbadx.herokuapp.com'
+    CV_SERVER_URL = 'https://linc.semantic.md'
     CV_IDENTIFICATIONS_ENDPOINT = 'identifications'
 
     def initialize(cv_request)

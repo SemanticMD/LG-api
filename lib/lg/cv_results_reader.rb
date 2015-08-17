@@ -3,7 +3,7 @@ require 'rest-client'
 module LG
   class CvResultsReader
 
-    CV_SERVER_URL = 'https://simbadx.herokuapp.com'
+    CV_SERVER_URL = 'https://linc.semantic.md'
     CV_RESULTS_ENDPOINT = 'results'
 
     def initialize(cv_request)
